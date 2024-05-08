@@ -1,0 +1,46 @@
+/* Including parts. */
+// @import "navmenu";
+// // @import "elementor";
+// @import "icons";
+// @import "map";
+
+$blackColor: #333;
+$primaryColor: #e63f51;
+$primaryDarkColor: #912833;
+$primaryLightColor: #ffdbdf;
+$secondaryColor: #FFCF02;
+$popupStepHeight: 300px;
+
+$frameWidth: 350px;
+$frameHeight: 600px;
+
+#payment_method_flutterwave {
+  & + label {
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+.flutterwave {
+  &__checkout {
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-size: 30% auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: rgba(51, 51, 51, 0.3137254902);
+    animation: 1.4s linear infinite flutterIconFadeInOut;
+  }
+  // &__loading {}
+}
+@keyframes flutterIconFadeInOut {
+  0% {background-blend-mode: normal;}
+  50% {background-blend-mode: multiply;}
+  100% {background-blend-mode: color;}
+}

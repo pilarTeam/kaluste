@@ -1,0 +1,26 @@
+/*
+ * Base Scripts
+ */
+.customizer {
+  &__container {
+    width: 100%;
+    padding: 10px 0;
+  }
+  &__wrapper {
+    display: block;
+    position: relative;
+    padding: 0 10px;
+    margin: 20px auto;
+    border: 1px solid #dddd;
+    border-radius: 10px;
+    min-height: 200px;
+    width: 100%;
+  }
+}
+
+/*
+ * Custom necessery css scripts it required.
+*/
+#woocommerce-coupon-data ul.wc-tabs li.customized_tab a::before, #woocommerce-product-data ul.wc-tabs li.customized_tab a::before, .woocommerce ul.wc-tabs li.customized_tab a::before {
+  content: "\f540";
+}

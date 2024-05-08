@@ -26,9 +26,9 @@ class Woocommerce {
 		add_filter('woocommerce_product_class', [$this, 'woocommerce_product_class'], 10, 2);
 		add_filter('woocommerce_product_options_general_product_data', [$this, 'woocommerce_product_options_general_product_data'], 10, 0);
 
-		add_action('init', [$this, 'customize_rewrite_rules'], 10, 0);
-		add_action('template_redirect', [$this, 'customize_endpoint_content'], 10, 0);
-		add_filter('template_include', [$this, 'template_include'], 10, 1);
+		// add_action('init', [$this, 'customize_rewrite_rules'], 10, 0);
+		// add_action('template_redirect', [$this, 'customize_endpoint_content'], 10, 0);
+		// add_filter('template_include', [$this, 'template_include'], 10, 1);
 	}
 	/**
 	 * Get settings object form wooocommrers payment settings including api keys and sensitive informations.
@@ -199,7 +199,9 @@ class Woocommerce {
 						<div class="customizer__header"></div>
 						<div class="customizer__body">
 							<div class="customizer__wrap">
-								
+								<div id="customizer_root" data-product_id="<?php echo esc_attr(get_the_ID()); ?>">
+									<!-- root area -->
+								</div>
 							</div>
 						</div>
 						<div class="customizer__footer"></div>
@@ -207,6 +209,8 @@ class Woocommerce {
 				</div>
 			</div>
 		</div>
+		<script src="https://unpkg.com/react/umd/react.development.js"></script>
+		<script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
 		<?php
 	}
 	/**
@@ -243,7 +247,6 @@ class Woocommerce {
 				}
 				if (isset($_POST[$_id]) || $_data) {update_post_meta($post_id, $_id, $_data);}
 			}
-			// kaluste_print([$post_id, $update, $product]);
 			// if (isset($_POST['_customized_meta'])) {update_post_meta($post_id, '_customized_meta', maybe_serialize($_POST['_customized_meta']));}
 		}
 	}
@@ -300,21 +303,27 @@ class Woocommerce {
 	/**
 	 * 
 	 */
-	public function customize_rewrite_rules() {
-		add_rewrite_endpoint('customize', EP_PAGES );
-	}
-	public function customize_endpoint_content() {
-		global $wp_query;
-		if ( isset( $wp_query->query_vars['customize'] ) ) {
-			include KALUSTE_DIR_PATH . '/templates/customizer/screen.php';
-			exit;
-		}
-	}
-	public function template_include($template = '') {
-		global $wp_query;
-		if (isset($wp_query->query_vars['customize'])) {
-			$template = KALUSTE_DIR_PATH . '/templates/customizer/screen.php';
-		}
-		return $template;
-	}
+	// public function customize_rewrite_rules() {
+	// 	add_rewrite_endpoint('customize', EP_PAGES );
+	// }
+	// public function customize_endpoint_content() {
+	// 	global $wp_query;
+	// 	if ( isset( $wp_query->query_vars['customize'] ) ) {
+	// 		include KALUSTE_DIR_PATH . '/templates/customizer/screen.php';
+	// 		exit;
+	// 	}
+	// }
+	// public function template_include($template = '') {
+	// 	global $wp_query;
+		
+	// 	if (
+	// 		// is_singular('product') && 
+	// 		// is_single() && is_product() &&
+	// 		isset($wp_query->query_vars['name']) && $wp_query->query_vars['name'] === 'customize'
+	// 	) {
+	// 		kaluste_print([$wp_query]);
+	// 		$template = KALUSTE_DIR_PATH . '/templates/customizer/screen.php';
+	// 	}
+	// 	return $template;
+	// }
 }

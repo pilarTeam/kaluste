@@ -130,8 +130,9 @@ import Post from "../modules/post";
 			json = thisClass.get_fields();fields = json.types;
 			template = thisClass.customier.body = document.createElement('div');template.classList.add('customizer__state__body');
 			var body = thisClass.customier.fields = document.createElement('div');body.classList.add('customizer__state__fields');
+			// 
 			template.appendChild(body);
-			form = document.createElement('div');form.classList.add('customizer__addnew__form');
+			form = document.createElement('div');form.classList.add('customizer__addnew__field');
 			if(document.querySelector('.customizer__addnew__form')) {
 				form = document.querySelector('.customizer__addnew__form');
 			}
@@ -251,7 +252,7 @@ import Post from "../modules/post";
 			return template;
 		}
 		do_field(field, data) {
-			const thisClass = this;
+			const thisClass = this;thisClass.currentFieldID = thisClass.currentFieldID??0;
 			var header, fields, form, fieldset, input, label, level, hidden, span, option, head, others, body, div, remove, img, icon, preview, cross, node;thisClass.currentFieldID++;
 			div = document.createElement('form');div.classList.add('customize__step');header = true;
 			div.action = '';div.method = 'post';div.id = 'popupstepform_'+thisClass.currentFieldID;
@@ -373,11 +374,12 @@ import Post from "../modules/post";
 					label = document.createElement('label');label.classList.add('form-label');
 					label.setAttribute('for', input.id);label.innerHTML = thisClass.i18n?.placeholder_text??'Field descriptions.';
 					fieldset.appendChild(label);fieldset.appendChild(input);
-					thisClass.lastfieldID++;
-					input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.type='text';input.name = 'placeholder';input.id='thefield'+thisClass.lastfieldID;input.setAttribute('value', data?.placeholder??'');
-					label = document.createElement('label');label.classList.add('form-label');
-					label.setAttribute('for', input.id);label.innerHTML = thisClass.i18n?.placeholder_text??'Placeholder text';
-					fieldset.appendChild(label);fieldset.appendChild(input);
+
+					// thisClass.lastfieldID++;
+					// input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.type='text';input.name = 'placeholder';input.id='thefield'+thisClass.lastfieldID;input.setAttribute('value', data?.placeholder??'');
+					// label = document.createElement('label');label.classList.add('form-label');
+					// label.setAttribute('for', input.id);label.innerHTML = thisClass.i18n?.placeholder_text??'Placeholder text';
+					// fieldset.appendChild(label);fieldset.appendChild(input);
 					/**
 					 * Reapeter fields
 					 */
@@ -441,6 +443,73 @@ import Post from "../modules/post";
 			};
 		}
 		do_repeater(el, row, groupAt) {
+			const thisClass = this;
+			var wrap, config, group, input, hidden, marker, remover, order, prepend, append, text, image, preview;
+			if(!el.dataset.order) {el.dataset.order=0;}
+			order = parseInt(el.dataset.order);
+			wrap = document.createElement('div');wrap.classList.add('single-repeater-option');
+			group = document.createElement('div');group.classList.add('input-group', 'mb-2', 'mr-sm-2');
+			prepend = document.createElement('div');prepend.classList.add('input-group-prepend');
+			text = document.createElement('div');text.classList.add('input-group-text');
+			marker = document.createElement('span');marker.classList.add('dashicons-before', 'dashicons-edit');marker.title = 'Condition';text.appendChild(marker);
+			prepend.appendChild(text);group.appendChild(prepend);
+	
+			input = document.createElement('input');input.classList.add('form-control');
+			input.placeholder = 'Item title';input.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.label';
+			input.setAttribute('value', row?.label??'');input.type = 'text';
+			group.appendChild(input);
+	
+			append = document.createElement('div');append.classList.add('input-group-append');
+			text = document.createElement('div');text.classList.add('input-group-text');
+			remover = document.createElement('span');remover.classList.add('dashicons-before', 'dashicons-trash');remover.title = 'Remove';text.appendChild(remover);
+			append.appendChild(text);group.appendChild(append);
+	
+			config = document.createElement('div');config.classList.add('form-controls-config');
+			
+			// hidden = document.createElement('input');hidden.classList.add('form-control', 'w-half');
+			// hidden.placeholder = 'Next step ID';hidden.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.next';
+			// hidden.setAttribute('value', row?.next??'');hidden.type = 'number';
+			// config.appendChild(hidden);
+	
+			hidden = document.createElement('input');hidden.classList.add('form-control', 'w-half');
+			hidden.placeholder = 'Price';hidden.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.cost';
+			hidden.setAttribute('value', row?.cost??'');hidden.type = 'number';
+			config.appendChild(hidden);
+	
+			image = document.createElement('button');image.classList.add('form-control', 'w-half', 'imglibrary');
+			image.placeholder = 'Image';image.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.imageUrl';
+			image.setAttribute('value', row?.imageUrl??'Select Image');image.type = 'button';
+			image.dataset.innertext = image.innerHTML = thisClass.i18n?.select_image??'Select image';
+			image.innerHTML = ((row?.imageUrl??'')=='')?image.innerHTML:image.innerHTML+' ('+(row?.imageUrl??'').split(/[\\/]/).pop()+')';
+			config.appendChild(image);
+			
+			hidden = document.createElement('input');hidden.classList.add('form-control');
+			hidden.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.image';hidden.type = 'hidden';
+			hidden.setAttribute('value', row?.image??'');config.appendChild(hidden);
+	
+			// Preview
+			config.appendChild(thisClass.imagePreview((row?.imageUrl??''), thisClass));
+	
+			image = document.createElement('button');image.classList.add('form-control', 'w-half', 'imglibrary');
+			image.placeholder = 'Thumbnail';image.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.thumbUrl';
+			image.setAttribute('value', row?.thumbUrl??'Select a thumbnail');image.type = 'button';
+			image.dataset.innertext = image.innerHTML = thisClass.i18n?.select_thumbnail??'Select thumbnail';
+			image.innerHTML = ((row?.thumbUrl??'')=='')?image.innerHTML:image.innerHTML+' ('+(row?.thumbUrl??'').split(/[\\/]/).pop()+')';
+			config.appendChild(image);
+			
+			hidden = document.createElement('input');hidden.classList.add('form-control');
+			hidden.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.thumb';hidden.type = 'hidden';
+			hidden.setAttribute('value', row?.thumb??'');config.appendChild(hidden);
+	
+			config.appendChild(thisClass.imagePreview((row?.thumbUrl??''), thisClass));
+			// el.dataset.optionGroup;
+			// label = document.createElement('label');label.classList.add('form-label');label.innerHTML = 'Label';
+			
+			// group.appendChild(label);
+			el.dataset.order = (order+1);
+			wrap.appendChild(group);wrap.appendChild(config);
+			el.parentElement.insertBefore(wrap, el);
+			setTimeout(() => {thisClass.init_intervalevent(window.thisClass);}, 300);
 		}
 		do_group_repeater(el, group) {
 		}
@@ -628,6 +697,7 @@ import Post from "../modules/post";
 			return transformedObj;
 		}
 		init_intervalevent() {
+			const thisClass = this;
 			document.querySelectorAll('.imglibrary:not([data-handled])').forEach((el, ei) => {
 				el.dataset.handled = true;
 				el.addEventListener('click', (event) => {

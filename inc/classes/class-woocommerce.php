@@ -111,7 +111,7 @@ class Woocommerce {
 				'label'    => __('Customization', 'kaluste'),
 				'target'   => 'customized_data_html',
 				'class'    => ['show_if_customized'],
-				'priority' => 21
+				'priority' => 0, // 21
 			]
 		];
 		return array_merge($tabs, $custom_tab);
@@ -196,7 +196,15 @@ class Woocommerce {
 			<div class="customizer">
 				<div class="customizer__container">
 					<div class="customizer__wrapper">
-						<div class="customizer__header"></div>
+						<div class="customizer__header">
+							<div class="customizer__header__title"></div>
+							<div class="customizer__header__actions">
+								<button type="button" class="btn button save-this-popup">
+									<span><?php echo esc_html(__('Update', 'kaluste')); ?></span>
+									<div class="spinner-material"></div>
+								</button>
+							</div>
+						</div>
 						<div class="customizer__body">
 							<div class="customizer__wrap">
 								<div id="customizer_root" data-product_id="<?php echo esc_attr(get_the_ID()); ?>">
@@ -204,7 +212,15 @@ class Woocommerce {
 								</div>
 							</div>
 						</div>
-						<div class="customizer__footer"></div>
+						<div class="customizer__footer">
+							<div class="customizer__header__title"></div>
+							<div class="customizer__header__actions">
+								<button type="button" class="btn button add-new-tab" data-action="newTab">
+									<span><?php echo esc_html(__('Add new Tab', 'kaluste')); ?></span>
+									<div class="spinner-material"></div>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

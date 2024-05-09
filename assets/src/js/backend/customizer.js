@@ -1,5 +1,4 @@
 import Select from 'react-select'
-// import { tabRepeaterBtn, tabRepeater } from './tab-repeater';
 
 function IconSetTrash(props) {
   const component = props.component;

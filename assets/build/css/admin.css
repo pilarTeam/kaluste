@@ -449,6 +449,11 @@
   border: 1px solid rgba(221, 221, 221, 0.8666666667);
   border-bottom: unset;
 }
+.customize__step__body > .form-group .single-repeater-headacts {
+  gap: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+}
 .customize__step__body > .form-group .single-repeater-body {
   border-top: unset;
   padding: 20px 10px 10px;

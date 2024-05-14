@@ -19529,7 +19529,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     }, {
       key: "do_field",
       value: function do_field(field, data) {
-        var _thisClass$currentFie, _data$placeholder, _thisClass$i18n$place, _thisClass$i18n17, _thisClass$i18n$place2, _thisClass$i18n18, _data$type5, _data$placeholder2, _thisClass$i18n$place3, _thisClass$i18n19, _thisClass$i18n$place4, _thisClass$i18n20, _data$label, _thisClass$i18n$input, _thisClass$i18n21, _data$description, _thisClass$i18n$place5, _thisClass$i18n22, _thisClass$i18n$add_n2, _thisClass$i18n23, _data$options;
+        var _thisClass$currentFie, _data$placeholder, _thisClass$i18n$place, _thisClass$i18n17, _thisClass$i18n$place2, _thisClass$i18n18, _data$type5, _data$placeholder2, _thisClass$i18n$place3, _thisClass$i18n19, _thisClass$i18n$place4, _thisClass$i18n20, _thisClass$i18n$add_n2, _thisClass$i18n21, _data$options;
         var thisClass = this;
         thisClass.currentFieldID = (_thisClass$currentFie = thisClass.currentFieldID) !== null && _thisClass$currentFie !== void 0 ? _thisClass$currentFie : 0;
         var header, fields, form, fieldset, input, label, level, hidden, span, option, head, others, body, div, remove, img, icon, preview, cross, node;
@@ -19702,31 +19702,18 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           case 'select':
           case 'radio':
           case 'checkbox':
+          case 'image':
             fieldset = document.createElement('div');
             fieldset.classList.add('form-group');
-            input = document.createElement('input');
-            input.classList.add('form-control', 'form-control-' + field.type);
-            input.type = 'text';
-            input.name = 'label';
-            input.id = 'thefield' + thisClass.lastfieldID;
-            input.setAttribute('value', (_data$label = data === null || data === void 0 ? void 0 : data.label) !== null && _data$label !== void 0 ? _data$label : '');
-            label = document.createElement('label');
-            label.classList.add('form-label');
-            label.setAttribute('for', input.id);
-            label.innerHTML = (_thisClass$i18n$input = (_thisClass$i18n21 = thisClass.i18n) === null || _thisClass$i18n21 === void 0 ? void 0 : _thisClass$i18n21.input_label) !== null && _thisClass$i18n$input !== void 0 ? _thisClass$i18n$input : 'Input label';
-            fieldset.appendChild(label);
-            fieldset.appendChild(input);
-            input = document.createElement('input');
-            input.classList.add('form-control', 'form-control-' + field.type);
-            input.id = 'thefield' + thisClass.lastfieldID;
-            input.name = 'description';
-            input.setAttribute('value', (_data$description = data === null || data === void 0 ? void 0 : data.description) !== null && _data$description !== void 0 ? _data$description : '');
-            label = document.createElement('label');
-            label.classList.add('form-label');
-            label.setAttribute('for', input.id);
-            label.innerHTML = (_thisClass$i18n$place5 = (_thisClass$i18n22 = thisClass.i18n) === null || _thisClass$i18n22 === void 0 ? void 0 : _thisClass$i18n22.placeholder_text) !== null && _thisClass$i18n$place5 !== void 0 ? _thisClass$i18n$place5 : 'Field descriptions.';
-            fieldset.appendChild(label);
-            fieldset.appendChild(input);
+            // input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.type='text';input.name = 'label';input.id='thefield'+thisClass.lastfieldID;input.setAttribute('value', data?.label??'');
+            // label = document.createElement('label');label.classList.add('form-label');
+            // label.setAttribute('for', input.id);label.innerHTML = thisClass.i18n?.input_label??'Input label';
+            // fieldset.appendChild(label);fieldset.appendChild(input);
+
+            // input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.id='thefield'+thisClass.lastfieldID;input.name = 'description';input.setAttribute('value', data?.description??'');
+            // label = document.createElement('label');label.classList.add('form-label');
+            // label.setAttribute('for', input.id);label.innerHTML = thisClass.i18n?.placeholder_text??'Field descriptions.';
+            // fieldset.appendChild(label);fieldset.appendChild(input);
 
             // thisClass.lastfieldID++;
             // input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.type='text';input.name = 'placeholder';input.id='thefield'+thisClass.lastfieldID;input.setAttribute('value', data?.placeholder??'');
@@ -19744,7 +19731,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             input.classList.add('btn', 'button', 'my-3', 'do_repeater_field');
             input.type = 'button';
             input.dataset.order = 0;
-            input.innerHTML = (_thisClass$i18n$add_n2 = (_thisClass$i18n23 = thisClass.i18n) === null || _thisClass$i18n23 === void 0 ? void 0 : _thisClass$i18n23.add_new_option) !== null && _thisClass$i18n$add_n2 !== void 0 ? _thisClass$i18n$add_n2 : 'Add new option';
+            input.innerHTML = (_thisClass$i18n$add_n2 = (_thisClass$i18n21 = thisClass.i18n) === null || _thisClass$i18n21 === void 0 ? void 0 : _thisClass$i18n21.add_new_option) !== null && _thisClass$i18n$add_n2 !== void 0 ? _thisClass$i18n$add_n2 : 'Add new Item';
             input.dataset.optionGroup = field.type;
             // 
             input.addEventListener('click', function (event) {
@@ -19810,7 +19797,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       value: function get_fields() {
         return {
           // types: ['text', 'number', 'date', 'time', 'local', 'color', 'range', 'textarea', 'select', 'radio', 'checkbox']
-          types: ['text', 'textarea', 'radio', 'checkbox']
+          types: ['text', 'textarea', 'radio', 'checkbox', 'image']
         };
       }
     }, {
@@ -19835,15 +19822,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           var headtext = document.createElement('div');
           headtext.classList.add('single-repeater-headtext');
           headtext.innerHTML = (_row$label = row === null || row === void 0 ? void 0 : row.label) !== null && _row$label !== void 0 ? _row$label : 'N/A';
-          headtext.addEventListener('click', function (event) {
-            event.preventDefault();
-            if (wrap.classList.contains('show-configs')) {
-              jQuery(head.nextElementSibling).slideUp();
-            } else {
-              jQuery(head.nextElementSibling).slideDown();
-            }
-            wrap.classList.toggle('show-configs');
-          });
+          // headtext.addEventListener('click', (event) => {
+          // 	event.preventDefault();
+          // });
           var headacts = document.createElement('div');
           headacts.classList.add('single-repeater-headacts');
           var title = document.createElement('span');
@@ -19857,6 +19838,23 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               wrap.remove();
             }
           });
+          var HActToggle = document.createElement('span');
+          HActToggle.classList.add('dashicons-before', 'dashicons-arrow-up');
+          HActToggle.title = 'Remove';
+          HActToggle.addEventListener('click', function (event) {
+            event.preventDefault();
+            if (wrap.classList.contains('show-configs')) {
+              HActToggle.classList.add('dashicons-arrow-down');
+              HActToggle.classList.remove('dashicons-arrow-up');
+              jQuery(head.nextElementSibling).slideUp();
+            } else {
+              HActToggle.classList.add('dashicons-arrow-up');
+              HActToggle.classList.remove('dashicons-arrow-down');
+              jQuery(head.nextElementSibling).slideDown();
+            }
+            wrap.classList.toggle('show-configs');
+          });
+          headacts.appendChild(HActToggle);
           headacts.appendChild(remover);
           headtext.appendChild(title);
           head.appendChild(headtext);
@@ -19867,7 +19865,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
          * Body Section
          */
         if (true) {
-          var _row$label2, _row$cost, _row$gallery;
+          var _row$label2, _row$cost;
           var body = document.createElement('div');
           body.classList.add('single-repeater-body');
           group = document.createElement('div');
@@ -19901,167 +19899,151 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           // Preview + Upload Button
           config.appendChild(thisClass.image_button_preview({
             subObj: 'thumb',
-            btnText: 'Select thumbnail',
+            btnText: 'Select Image',
             popConfirm: 'Use this Image',
-            popTitle: 'Select a thumbnail image',
-            btnTextonSelect: 'Change thumbnail Image'
+            popTitle: 'Select an image',
+            btnTextonSelect: 'Change Image'
           }, (groupAt !== false ? 'groups.' + groupAt + '.options.' : 'options.') + order + '.thumb', row));
-          // 
-          // Preview + Upload Button
-          config.appendChild(thisClass.image_button_preview({
-            subObj: 'canvas',
-            popConfirm: 'Use this Image',
-            btnText: 'Select Canvas Image',
-            popTitle: 'Select a Canvas image',
-            btnTextonSelect: 'Change Canvas Image'
-          }, (groupAt !== false ? 'groups.' + groupAt + '.options.' : 'options.') + order + '.canvas', row));
+          // // 
+          // // Preview + Upload Button
+          // config.appendChild(thisClass.image_button_preview(
+          // 	{
+          // 		subObj: 'canvas',
+          // 		popConfirm: 'Use this Image',
+          // 		btnText: 'Select Canvas Image',
+          // 		popTitle: 'Select a Canvas image',
+          // 		btnTextonSelect: 'Change Canvas Image',
+          // 	},
+          // 	((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.canvas',
+          // 	row
+          // ));
           // 
           // config.appendChild(thisClass.imagePreview(row?.thumbUrl??''));
           // el.dataset.optionGroup;
           // label = document.createElement('label');label.classList.add('form-label');label.innerHTML = 'Label';
           // 
-          var fcontrol = document.createElement('div');
-          fcontrol.classList.add('w-half');
-          var gHidden = document.createElement('input');
-          gHidden.classList.add('form-control');
-          gHidden.name = (groupAt !== false ? 'groups.' + groupAt + '.options.' : 'options.') + order + '.gallery';
-          gHidden.type = 'hidden';
-          gHidden.setAttribute('value', JSON.stringify((_row$gallery = row === null || row === void 0 ? void 0 : row.gallery) !== null && _row$gallery !== void 0 ? _row$gallery : []));
-          config.appendChild(gHidden);
-          var gallery = document.createElement('button');
-          gallery.classList.add('btn', 'button', 'w-half');
-          gallery.type = 'button';
-          gallery.innerHTML = 'Gallery Setup';
-          gallery.addEventListener('click', function (event) {
-            var _row$gallery2, _thisClass$i18n$updat, _thisClass$i18n24;
-            event.preventDefault();
-            var currentConfig = (_row$gallery2 = row === null || row === void 0 ? void 0 : row.gallery) !== null && _row$gallery2 !== void 0 ? _row$gallery2 : [];
-            sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
-              focusConfirm: false,
-              showCloseButton: true,
-              showCancelButton: true,
-              title: "Gallery ".concat(headtext.innerHTML),
-              html: '<div id="topushnewgallery"></div>',
-              confirmButtonText: (_thisClass$i18n$updat = (_thisClass$i18n24 = thisClass.i18n) === null || _thisClass$i18n24 === void 0 ? void 0 : _thisClass$i18n24.update) !== null && _thisClass$i18n$updat !== void 0 ? _thisClass$i18n$updat : 'Update',
-              allowOutsideClick: function allowOutsideClick() {
-                return false;
-              },
-              didOpen: function didOpen() {
-                var _row$gallery3;
-                var body = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.getPopup().querySelector("#topushnewgallery");
-                var gallerycont = document.createElement('div');
-                gallerycont.classList.add('gallery-container');
-                var gallerywrap = document.createElement('div');
-                gallerywrap.classList.add('gallery-wrap');
-                var galleryrow = document.createElement('div');
-                galleryrow.classList.add('gallery-row');
-                /**
-                 * A lot of task here...
-                 */
-                var galleryItemHtml = function galleryItemHtml(item, index) {
-                  var _item$thumbUrl, _thisClass$i18n$remov, _thisClass$i18n25;
-                  var gcard = document.createElement('div');
-                  gcard.classList.add('gallery-card');
-                  var gwrap = document.createElement('div');
-                  gwrap.classList.add('gallery-card-wrap');
-                  var gimg = document.createElement('div');
-                  gimg.classList.add('gallery-card-img', 'imgpreview');
-                  var img = document.createElement('img');
-                  img.alt = item.title;
-                  img.src = (_item$thumbUrl = item === null || item === void 0 ? void 0 : item.thumbUrl) !== null && _item$thumbUrl !== void 0 ? _item$thumbUrl : '';
-                  var remove = document.createElement('div');
-                  remove.classList.add('dashicons-before', 'dashicons-dismiss');
-                  remove.title = (_thisClass$i18n$remov = (_thisClass$i18n25 = thisClass.i18n) === null || _thisClass$i18n25 === void 0 ? void 0 : _thisClass$i18n25.remove) !== null && _thisClass$i18n$remov !== void 0 ? _thisClass$i18n$remov : 'Remove';
-                  remove.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    if (confirm('Are you sure you want to remove this item?')) {
-                      console.log(currentConfig);
-                      currentConfig.filter(function (row) {
-                        return row.id === item.id;
-                      });
-                      gcard.remove();
-                      console.log(currentConfig);
-                    }
-                  });
-                  gimg.appendChild(img);
-                  gimg.appendChild(remove);
-                  gwrap.appendChild(gimg);
-                  gcard.appendChild(gwrap);
-                  return gcard;
-                };
-                // 
-                ((_row$gallery3 = row === null || row === void 0 ? void 0 : row.gallery) !== null && _row$gallery3 !== void 0 ? _row$gallery3 : []).forEach(function (item, index) {
-                  galleryrow.appendChild(galleryItemHtml(item, index));
-                });
-                // 
-                gallerywrap.appendChild(galleryrow);
-                var galleryfoot = document.createElement('div');
-                galleryfoot.classList.add('gallery-card-foot');
-                var button = document.createElement('button');
-                button.type = 'button';
-                button.classList.add('btn', 'button');
-                button.innerHTML = button.title = 'Add Item';
-                button.addEventListener('click', function (event) {
-                  event.preventDefault();
-                  try {
-                    if (typeof wp.media !== 'undefined') {
-                      var mediaUploader = wp.media({
-                        title: 'Select / Upload a gallery Item',
-                        button: {
-                          text: 'Use this Image'
-                        },
-                        multiple: true
-                      });
-                      mediaUploader.on('select', function () {
-                        mediaUploader.state().get('selection').map(function (attachment) {
-                          attachment = attachment.toJSON();
-                          if (attachment.type !== 'image') {
-                            throw new Error('You can only upload images as gallery item');
-                          }
-                          if (!currentConfig.find(function (item) {
-                            return item.id === attachment.id;
-                          })) {
-                            var _attachment$sizes$thu, _attachment$sizes, _attachment$filename, _attachment;
-                            var item = {
-                              id: attachment.id,
-                              title: attachment.title,
-                              // imageUrl: attachment.url,
-                              thumbUrl: (_attachment$sizes$thu = (_attachment$sizes = attachment.sizes) === null || _attachment$sizes === void 0 || (_attachment$sizes = _attachment$sizes.thumbnail) === null || _attachment$sizes === void 0 ? void 0 : _attachment$sizes.url) !== null && _attachment$sizes$thu !== void 0 ? _attachment$sizes$thu : '',
-                              filename: (_attachment$filename = (_attachment = attachment) === null || _attachment === void 0 ? void 0 : _attachment.filename) !== null && _attachment$filename !== void 0 ? _attachment$filename : ''
-                            };
-                            currentConfig.push(item);
-                            galleryrow.appendChild(galleryItemHtml(item, currentConfig.length + 1));
-                          } else {
-                            throw new Error('You can\'t import same image file twice.');
-                          }
-                        });
-                      });
-                      mediaUploader.open();
-                    } else {
-                      throw new Error('WordPress media library not initialized.');
-                    }
-                  } catch (error) {
-                    console.log(error);
-                  }
-                });
-                galleryfoot.appendChild(button);
-                gallerywrap.appendChild(galleryfoot);
-                gallerycont.appendChild(gallerywrap);
-                body.appendChild(gallerycont);
-              }
-            }).then(function (result) {
-              // console.log(result);
-              if (result !== null && result !== void 0 && result.isConfirmed) {
-                if (currentConfig) {
-                  gHidden.value = JSON.stringify(currentConfig);
-                }
-              }
-              // if (result.dismiss === Swal.DismissReason.timer) {
-              //   console.log("I was closed by the timer");
-              // }
-            });
-          });
-          fcontrol.appendChild(gallery);
+          // Gallery Section
+          // var fcontrol = document.createElement('div');fcontrol.classList.add('w-half');
+          // var gHidden = document.createElement('input');gHidden.classList.add('form-control');
+          // gHidden.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.gallery';gHidden.type = 'hidden';
+          // gHidden.setAttribute('value', JSON.stringify(row?.gallery??[]));config.appendChild(gHidden);
+          // var gallery = document.createElement('button');gallery.classList.add('btn', 'button', 'w-half');
+          // gallery.type = 'button';gallery.innerHTML = 'Gallery Setup';
+          // gallery.addEventListener('click', (event) => {
+          // 	event.preventDefault();
+          // 	let currentConfig = row?.gallery??[];
+          // 	Swal.fire({
+          // 		focusConfirm: false,
+          // 		showCloseButton: true,
+          // 		showCancelButton: true,
+          // 		title: `Gallery ${headtext.innerHTML}`,
+          // 		html: '<div id="topushnewgallery"></div>',
+          // 		confirmButtonText: thisClass.i18n?.update??'Update',
+          // 		allowOutsideClick: () => false,
+          // 		didOpen: () => {
+          // 			const body = Swal.getPopup().querySelector("#topushnewgallery");
+          // 			var gallerycont = document.createElement('div');
+          // 			gallerycont.classList.add('gallery-container');
+          // 			var gallerywrap = document.createElement('div');
+          // 			gallerywrap.classList.add('gallery-wrap');
+          // 			var galleryrow = document.createElement('div');
+          // 			galleryrow.classList.add('gallery-row');
+          // 			/**
+          // 			 * A lot of task here...
+          // 			 */
+          // 			var galleryItemHtml = (item, index) => {
+          // 				var gcard = document.createElement('div');
+          // 				gcard.classList.add('gallery-card');
+          // 				var gwrap = document.createElement('div');
+          // 				gwrap.classList.add('gallery-card-wrap');
+          // 				var gimg = document.createElement('div');
+          // 				gimg.classList.add('gallery-card-img', 'imgpreview');
+          // 				var img = document.createElement('img');
+          // 				img.alt = item.title;
+          // 				img.src = item?.thumbUrl??'';
+          // 				var remove = document.createElement('div');
+          // 				remove.classList.add('dashicons-before', 'dashicons-dismiss');
+          // 				remove.title = thisClass.i18n?.remove??'Remove';
+          // 				remove.addEventListener('click', (event) => {
+          // 					event.preventDefault();
+          // 					if (confirm('Are you sure you want to remove this item?')) {
+          // 						console.log(currentConfig)
+          // 						currentConfig.filter(row => row.id === item.id);
+          // 						gcard.remove();
+          // 						console.log(currentConfig)
+          // 					}
+          // 				});
+          // 				gimg.appendChild(img);gimg.appendChild(remove);gwrap.appendChild(gimg);gcard.appendChild(gwrap);
+          // 				return gcard;
+          // 			};
+          // 			// 
+          // 			(row?.gallery??[]).forEach((item, index) => {
+          // 				galleryrow.appendChild(galleryItemHtml(item, index));
+          // 			});
+          // 			// 
+          // 			gallerywrap.appendChild(galleryrow);
+          // 			var galleryfoot = document.createElement('div');
+          // 			galleryfoot.classList.add('gallery-card-foot');
+          // 			var button = document.createElement('button');
+          // 			button.type = 'button';button.classList.add('btn', 'button');
+          // 			button.innerHTML = button.title = 'Add Item';
+          // 			button.addEventListener('click', (event) => {
+          // 				event.preventDefault();
+          // 				try {
+          // 					if (typeof wp.media!=='undefined') {
+          // 						var mediaUploader = wp.media({
+          // 							title: 'Select / Upload a gallery Item',
+          // 							button: {text: 'Use this Image'},
+          // 							multiple: true
+          // 						});
+          // 						mediaUploader.on('select', function() {
+          // 							mediaUploader.state().get('selection').map(attachment => {
+          // 								attachment = attachment.toJSON();
+          // 								if (attachment.type !== 'image') {
+          // 									throw new Error('You can only upload images as gallery item');
+          // 								}
+          // 								if (!currentConfig.find(item => item.id === attachment.id)) {
+          // 									var item = {
+          // 										id: attachment.id,
+          // 										title: attachment.title,
+          // 										// imageUrl: attachment.url,
+          // 										thumbUrl: attachment.sizes?.thumbnail?.url??'',
+          // 										filename: attachment?.filename??'',
+          // 									};
+          // 									currentConfig.push(item);
+          // 									galleryrow.appendChild(galleryItemHtml(item, (currentConfig.length + 1)));
+          // 								} else {
+          // 									throw new Error('You can\'t import same image file twice.');
+          // 								}
+          // 							});
+          // 						});
+          // 						mediaUploader.open();
+          // 					} else {
+          // 						throw new Error('WordPress media library not initialized.');
+          // 					}
+          // 				} catch (error) {
+          // 					console.log(error);
+          // 				}
+          // 			});
+          // 			galleryfoot.appendChild(button);
+          // 			gallerywrap.appendChild(galleryfoot);
+          // 			gallerycont.appendChild(gallerywrap);
+          // 			body.appendChild(gallerycont);
+          // 		}
+          // 	}).then((result) => {
+          // 		// console.log(result);
+          // 		if (result?.isConfirmed) {
+          // 			if (currentConfig) {
+          // 				gHidden.value = JSON.stringify(currentConfig);
+          // 			}
+          // 		}
+          // 		// if (result.dismiss === Swal.DismissReason.timer) {
+          // 		//   console.log("I was closed by the timer");
+          // 		// }
+          // 	});
+          // });
+          // fcontrol.appendChild(gallery);
+
           config.appendChild(fcontrol);
           // 
           // group.appendChild(label);
@@ -20107,7 +20089,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     }, {
       key: "imagePreview",
       value: function imagePreview(src) {
-        var _thisClass$i18n$remov2, _thisClass$i18n26;
+        var _thisClass$i18n$remov, _thisClass$i18n22;
         var cross,
           preview,
           image,
@@ -20122,7 +20104,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         name = name[name.length - 1];
         cross = document.createElement('div');
         cross.classList.add('dashicons-before', 'dashicons-dismiss');
-        cross.title = (_thisClass$i18n$remov2 = (_thisClass$i18n26 = thisClass.i18n) === null || _thisClass$i18n26 === void 0 ? void 0 : _thisClass$i18n26.remove) !== null && _thisClass$i18n$remov2 !== void 0 ? _thisClass$i18n$remov2 : 'Remove';
+        cross.title = (_thisClass$i18n$remov = (_thisClass$i18n22 = thisClass.i18n) === null || _thisClass$i18n22 === void 0 ? void 0 : _thisClass$i18n22.remove) !== null && _thisClass$i18n$remov !== void 0 ? _thisClass$i18n$remov : 'Remove';
         image = document.createElement('img');
         image.src = src;
         image.alt = name;
@@ -20133,7 +20115,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     }, {
       key: "image_button_preview",
       value: function image_button_preview(args, namePrefix, row) {
-        var _subObj$imageURL, _subObj$filename, _thisClass$i18n$remov3, _thisClass$i18n27, _subObj$imageID, _subObj$imageUrl, _args$btnText, _subObj$imageID2, _subObj$imageURL2;
+        var _subObj$imageURL, _subObj$filename, _thisClass$i18n$remov2, _thisClass$i18n23, _subObj$imageID, _subObj$imageUrl, _args$btnText, _subObj$imageID2, _subObj$imageURL2;
         var div, button, prev_wrap, preview, image, cross;
         var subObj = args !== null && args !== void 0 && args.subObj && row[args === null || args === void 0 ? void 0 : args.subObj] ? row[args === null || args === void 0 ? void 0 : args.subObj] : row;
         div = document.createElement('div');
@@ -20146,7 +20128,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         image.alt = (_subObj$filename = subObj === null || subObj === void 0 ? void 0 : subObj.filename) !== null && _subObj$filename !== void 0 ? _subObj$filename : '';
         cross = document.createElement('div');
         cross.classList.add('dashicons-before', 'dashicons-dismiss');
-        cross.title = (_thisClass$i18n$remov3 = (_thisClass$i18n27 = thisClass.i18n) === null || _thisClass$i18n27 === void 0 ? void 0 : _thisClass$i18n27.remove) !== null && _thisClass$i18n$remov3 !== void 0 ? _thisClass$i18n$remov3 : 'Remove';
+        cross.title = (_thisClass$i18n$remov2 = (_thisClass$i18n23 = thisClass.i18n) === null || _thisClass$i18n23 === void 0 ? void 0 : _thisClass$i18n23.remove) !== null && _thisClass$i18n$remov2 !== void 0 ? _thisClass$i18n$remov2 : 'Remove';
         preview = document.createElement('div');
         preview.classList.add('imgpreview');
         if (((_subObj$imageID = subObj === null || subObj === void 0 ? void 0 : subObj.imageID) !== null && _subObj$imageID !== void 0 ? _subObj$imageID : '') == '') {
@@ -20195,8 +20177,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               imageID.value = attachment.id;
               var thumbnail = attachment.url;
               if (attachment !== null && attachment !== void 0 && attachment.sizes) {
-                var _attachment$sizes2, _attachment$sizes$thu2;
-                if ((_attachment$sizes2 = attachment.sizes) !== null && _attachment$sizes2 !== void 0 && _attachment$sizes2.thumbnail && (_attachment$sizes$thu2 = attachment.sizes.thumbnail) !== null && _attachment$sizes$thu2 !== void 0 && _attachment$sizes$thu2.url) {
+                var _attachment$sizes, _attachment$sizes$thu;
+                if ((_attachment$sizes = attachment.sizes) !== null && _attachment$sizes !== void 0 && _attachment$sizes.thumbnail && (_attachment$sizes$thu = attachment.sizes.thumbnail) !== null && _attachment$sizes$thu !== void 0 && _attachment$sizes$thu.url) {
                   thumbnail = attachment.sizes.thumbnail.url;
                 }
               }
@@ -20236,7 +20218,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }
         elem.dataset.context = true;
         if (!((_thisClass$customier = thisClass.customier) !== null && _thisClass$customier !== void 0 && _thisClass$customier.contextmenu)) {
-          var _thisClass$i18n$updat2, _thisClass$i18n28, _thisClass$i18n$expor, _thisClass$i18n29, _thisClass$i18n$impor, _thisClass$i18n30;
+          var _thisClass$i18n$updat, _thisClass$i18n24, _thisClass$i18n$expor, _thisClass$i18n25, _thisClass$i18n$impor, _thisClass$i18n26;
           var contextMenu = thisClass.customier.contextmenu = document.createElement('div');
           contextMenu.classList.add('contextmenu');
           var ul = thisClass.actionButtons.list = document.createElement('ul');
@@ -20247,7 +20229,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           li.classList.add('contextmenu__list__item');
           a = document.createElement('a');
           a.href = '#';
-          a.innerHTML = (_thisClass$i18n$updat2 = (_thisClass$i18n28 = thisClass.i18n) === null || _thisClass$i18n28 === void 0 ? void 0 : _thisClass$i18n28.update) !== null && _thisClass$i18n$updat2 !== void 0 ? _thisClass$i18n$updat2 : 'Update';
+          a.innerHTML = (_thisClass$i18n$updat = (_thisClass$i18n24 = thisClass.i18n) === null || _thisClass$i18n24 === void 0 ? void 0 : _thisClass$i18n24.update) !== null && _thisClass$i18n$updat !== void 0 ? _thisClass$i18n$updat : 'Update';
           a.addEventListener('click', function (event) {
             var _document$querySelect;
             event.preventDefault();
@@ -20260,7 +20242,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           li.classList.add('contextmenu__list__item');
           a = document.createElement('a');
           a.href = '#';
-          a.innerHTML = (_thisClass$i18n$expor = (_thisClass$i18n29 = thisClass.i18n) === null || _thisClass$i18n29 === void 0 ? void 0 : _thisClass$i18n29.export) !== null && _thisClass$i18n$expor !== void 0 ? _thisClass$i18n$expor : 'Export';
+          a.innerHTML = (_thisClass$i18n$expor = (_thisClass$i18n25 = thisClass.i18n) === null || _thisClass$i18n25 === void 0 ? void 0 : _thisClass$i18n25.export) !== null && _thisClass$i18n$expor !== void 0 ? _thisClass$i18n$expor : 'Export';
           a.addEventListener('click', function (event) {
             event.preventDefault();
             setTimeout(function () {
@@ -20291,7 +20273,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           file.style.display = 'none';
           a = document.createElement('a');
           a.href = '#';
-          a.innerHTML = (_thisClass$i18n$impor = (_thisClass$i18n30 = thisClass.i18n) === null || _thisClass$i18n30 === void 0 ? void 0 : _thisClass$i18n30.import) !== null && _thisClass$i18n$impor !== void 0 ? _thisClass$i18n$impor : 'Import';
+          a.innerHTML = (_thisClass$i18n$impor = (_thisClass$i18n26 = thisClass.i18n) === null || _thisClass$i18n26 === void 0 ? void 0 : _thisClass$i18n26.import) !== null && _thisClass$i18n$impor !== void 0 ? _thisClass$i18n$impor : 'Import';
           file.addEventListener('change', function (event) {
             if (event.target.files[0]) {
               var selectedFile = event.target.files[0];
@@ -20310,13 +20292,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                       data.append('tabset', JSON.stringify(parsedData.imports));
                       data.append('_nonce', thisClass.ajaxNonce);
                       thisClass.post.sendToServer(data, thisClass).then(function (response) {
-                        var _thisClass$i18n$succe, _thisClass$i18n31, _thisClass$i18n$reloa, _thisClass$i18n32;
+                        var _thisClass$i18n$succe, _thisClass$i18n27, _thisClass$i18n$reloa, _thisClass$i18n28;
                         sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
                           showCancelButton: true,
                           icon: "success",
-                          title: (_thisClass$i18n$succe = (_thisClass$i18n31 = thisClass.i18n) === null || _thisClass$i18n31 === void 0 ? void 0 : _thisClass$i18n31.success) !== null && _thisClass$i18n$succe !== void 0 ? _thisClass$i18n$succe : "Success",
+                          title: (_thisClass$i18n$succe = (_thisClass$i18n27 = thisClass.i18n) === null || _thisClass$i18n27 === void 0 ? void 0 : _thisClass$i18n27.success) !== null && _thisClass$i18n$succe !== void 0 ? _thisClass$i18n$succe : "Success",
                           text: "Import successfully made! Please reload your application",
-                          confirmButtonText: (_thisClass$i18n$reloa = (_thisClass$i18n32 = thisClass.i18n) === null || _thisClass$i18n32 === void 0 ? void 0 : _thisClass$i18n32.reload) !== null && _thisClass$i18n$reloa !== void 0 ? _thisClass$i18n$reloa : 'Reload'
+                          confirmButtonText: (_thisClass$i18n$reloa = (_thisClass$i18n28 = thisClass.i18n) === null || _thisClass$i18n28 === void 0 ? void 0 : _thisClass$i18n28.reload) !== null && _thisClass$i18n$reloa !== void 0 ? _thisClass$i18n$reloa : 'Reload'
                         }).then(function (result) {
                           if (result !== null && result !== void 0 && result.isConfirmed) {
                             location.reload();
@@ -20340,8 +20322,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                         });
                       });
                     } else {
-                      var _thisClass$i18n$untru, _thisClass$i18n33;
-                      var message = (_thisClass$i18n$untru = (_thisClass$i18n33 = thisClass.i18n) === null || _thisClass$i18n33 === void 0 ? void 0 : _thisClass$i18n33.untrustable) !== null && _thisClass$i18n$untru !== void 0 ? _thisClass$i18n$untru : 'We can\'t find trustable imports contents.';
+                      var _thisClass$i18n$untru, _thisClass$i18n29;
+                      var message = (_thisClass$i18n$untru = (_thisClass$i18n29 = thisClass.i18n) === null || _thisClass$i18n29 === void 0 ? void 0 : _thisClass$i18n29.untrustable) !== null && _thisClass$i18n$untru !== void 0 ? _thisClass$i18n$untru : 'We can\'t find trustable imports contents.';
                       // thisClass.toastify({text: message ,className: "error", duration: 3000, stopOnFocus: true, style: {background: "linear-gradient(to right, #ffb8b8, #ff7575)"}}).showToast();
                       thisClass.toast.fire({
                         icon: 'error',
@@ -20351,9 +20333,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                       });
                     }
                   } catch (error) {
-                    var _thisClass$i18n$error, _thisClass$i18n34;
+                    var _thisClass$i18n$error, _thisClass$i18n30;
                     // console.error('Error parsing JSON:', error);
-                    var message = (_thisClass$i18n$error = (_thisClass$i18n34 = thisClass.i18n) === null || _thisClass$i18n34 === void 0 ? void 0 : _thisClass$i18n34.errorparsingjson) !== null && _thisClass$i18n$error !== void 0 ? _thisClass$i18n$error : 'Error parsing JSON:';
+                    var message = (_thisClass$i18n$error = (_thisClass$i18n30 = thisClass.i18n) === null || _thisClass$i18n30 === void 0 ? void 0 : _thisClass$i18n30.errorparsingjson) !== null && _thisClass$i18n$error !== void 0 ? _thisClass$i18n$error : 'Error parsing JSON:';
                     // thisClass.toastify({text: message + error,className: "error", duration: 3000, stopOnFocus: true, style: {background: "linear-gradient(to right, #ffb8b8, #ff7575)"}}).showToast();
                     thisClass.toast.fire({
                       icon: 'error',
@@ -20537,8 +20519,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         document.querySelectorAll('.single-repeater-option .input-group-append:not([data-handled])').forEach(function (trash) {
           trash.dataset.handled = true;
           trash.addEventListener('click', function (event) {
-            var _thisClass$i18n$rusur, _thisClass$i18n35;
-            if (trash.parentElement && confirm((_thisClass$i18n$rusur = (_thisClass$i18n35 = thisClass.i18n) === null || _thisClass$i18n35 === void 0 ? void 0 : _thisClass$i18n35.rusure) !== null && _thisClass$i18n$rusur !== void 0 ? _thisClass$i18n$rusur : 'Are you sure?')) {
+            var _thisClass$i18n$rusur, _thisClass$i18n31;
+            if (trash.parentElement && confirm((_thisClass$i18n$rusur = (_thisClass$i18n31 = thisClass.i18n) === null || _thisClass$i18n31 === void 0 ? void 0 : _thisClass$i18n31.rusure) !== null && _thisClass$i18n$rusur !== void 0 ? _thisClass$i18n$rusur : 'Are you sure?')) {
               jQuery(trash.parentElement.parentElement).slideUp();
               setTimeout(function () {
                 trash.parentElement.parentElement.remove();

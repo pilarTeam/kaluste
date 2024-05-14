@@ -603,6 +603,7 @@ import Post from "../modules/post";
 					break;
 				case 'input':case 'text':case 'number':case 'date':case 'time':case 'local':case 'color':case 'range':
 					fieldset = document.createElement('div');fieldset.classList.add('form-group');
+
 					input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.type = data?.type??field.type;
 					input.id = 'thefield'+thisClass.lastfieldID;
 					input.setAttribute('value', data?.placeholder??'');
@@ -610,19 +611,20 @@ import Post from "../modules/post";
 					label = document.createElement('label');label.classList.add('form-label');
 					label.setAttribute('for', input.id);
 					label.innerHTML = thisClass.i18n?.placeholder_ordefault??'Placeholder / Default value';
-					fieldset.appendChild(label);fieldset.appendChild(input);body.appendChild(fieldset);
+					fieldset.appendChild(label);fieldset.appendChild(input);
+					body.appendChild(fieldset);
 					break;
-				case 'select':case 'radio':case 'checkbox':
+				case 'select':case 'radio':case 'checkbox':case 'image':
 					fieldset = document.createElement('div');fieldset.classList.add('form-group');
-					input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.type='text';input.name = 'label';input.id='thefield'+thisClass.lastfieldID;input.setAttribute('value', data?.label??'');
-					label = document.createElement('label');label.classList.add('form-label');
-					label.setAttribute('for', input.id);label.innerHTML = thisClass.i18n?.input_label??'Input label';
-					fieldset.appendChild(label);fieldset.appendChild(input);
+					// input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.type='text';input.name = 'label';input.id='thefield'+thisClass.lastfieldID;input.setAttribute('value', data?.label??'');
+					// label = document.createElement('label');label.classList.add('form-label');
+					// label.setAttribute('for', input.id);label.innerHTML = thisClass.i18n?.input_label??'Input label';
+					// fieldset.appendChild(label);fieldset.appendChild(input);
 					
-					input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.id='thefield'+thisClass.lastfieldID;input.name = 'description';input.setAttribute('value', data?.description??'');
-					label = document.createElement('label');label.classList.add('form-label');
-					label.setAttribute('for', input.id);label.innerHTML = thisClass.i18n?.placeholder_text??'Field descriptions.';
-					fieldset.appendChild(label);fieldset.appendChild(input);
+					// input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.id='thefield'+thisClass.lastfieldID;input.name = 'description';input.setAttribute('value', data?.description??'');
+					// label = document.createElement('label');label.classList.add('form-label');
+					// label.setAttribute('for', input.id);label.innerHTML = thisClass.i18n?.placeholder_text??'Field descriptions.';
+					// fieldset.appendChild(label);fieldset.appendChild(input);
 
 					// thisClass.lastfieldID++;
 					// input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.type='text';input.name = 'placeholder';input.id='thefield'+thisClass.lastfieldID;input.setAttribute('value', data?.placeholder??'');
@@ -636,7 +638,7 @@ import Post from "../modules/post";
 					 * Reapeter fields
 					 */
 					input = document.createElement('button');input.classList.add('btn', 'button', 'my-3', 'do_repeater_field');input.type='button';input.dataset.order=0;
-					input.innerHTML = thisClass.i18n?.add_new_option??'Add new option';input.dataset.optionGroup=field.type;
+					input.innerHTML = thisClass.i18n?.add_new_option??'Add new Item';input.dataset.optionGroup=field.type;
 					// 
 					input.addEventListener('click', (event) => {
 						event.preventDefault();
@@ -697,7 +699,7 @@ import Post from "../modules/post";
 		get_fields() {
 			return {
 				// types: ['text', 'number', 'date', 'time', 'local', 'color', 'range', 'textarea', 'select', 'radio', 'checkbox']
-				types: ['text', 'textarea', 'radio', 'checkbox']
+				types: ['text', 'textarea', 'radio', 'checkbox', 'image']
 			};
 		}
 		do_repeater(el, row, groupAt) {
@@ -714,15 +716,9 @@ import Post from "../modules/post";
 				var head = document.createElement('div');head.classList.add('single-repeater-head');
 				var headtext = document.createElement('div');headtext.classList.add('single-repeater-headtext');
 				headtext.innerHTML = row?.label??'N/A';
-				headtext.addEventListener('click', (event) => {
-					event.preventDefault();
-					if (wrap.classList.contains('show-configs')) {
-						jQuery(head.nextElementSibling).slideUp();
-					} else {
-						jQuery(head.nextElementSibling).slideDown();
-					}
-					wrap.classList.toggle('show-configs');
-				});
+				// headtext.addEventListener('click', (event) => {
+				// 	event.preventDefault();
+				// });
 				var headacts = document.createElement('div');headacts.classList.add('single-repeater-headacts');
 				var title = document.createElement('span');title.classList.add('single-repeater-headtext-title');
 				remover = document.createElement('span');remover.classList.add('dashicons-before', 'dashicons-trash');remover.title = 'Remove';
@@ -730,9 +726,23 @@ import Post from "../modules/post";
 					event.preventDefault();
 					if (confirm('Are you sure you want to remove this item?')) {wrap.remove();}
 				});
-				headacts.appendChild(remover);headtext.appendChild(title);
-				head.appendChild(headtext);head.appendChild(headacts);
-				wrap.appendChild(head);
+				var HActToggle = document.createElement('span');HActToggle.classList.add('dashicons-before', 'dashicons-arrow-up');HActToggle.title = 'Remove';
+				HActToggle.addEventListener('click', (event) => {
+					event.preventDefault();
+					if (wrap.classList.contains('show-configs')) {
+						HActToggle.classList.add('dashicons-arrow-down');
+						HActToggle.classList.remove('dashicons-arrow-up');
+						jQuery(head.nextElementSibling).slideUp();
+					} else {
+						HActToggle.classList.add('dashicons-arrow-up');
+						HActToggle.classList.remove('dashicons-arrow-down');
+						jQuery(head.nextElementSibling).slideDown();
+					}
+					wrap.classList.toggle('show-configs');
+				});
+				headacts.appendChild(HActToggle);headacts.appendChild(remover);
+				headtext.appendChild(title);head.appendChild(headtext);
+				head.appendChild(headacts);wrap.appendChild(head);
 			}
 			/**
 			 * Body Section
@@ -761,152 +771,155 @@ import Post from "../modules/post";
 				config.appendChild(thisClass.image_button_preview(
 					{
 						subObj: 'thumb',
-						btnText: 'Select thumbnail',
+						btnText: 'Select Image',
 						popConfirm: 'Use this Image',
-						popTitle: 'Select a thumbnail image',
-						btnTextonSelect: 'Change thumbnail Image',
+						popTitle: 'Select an image',
+						btnTextonSelect: 'Change Image',
 					},
 					((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.thumb',
 					row
 				));
-				// 
-				// Preview + Upload Button
-				config.appendChild(thisClass.image_button_preview(
-					{
-						subObj: 'canvas',
-						popConfirm: 'Use this Image',
-						btnText: 'Select Canvas Image',
-						popTitle: 'Select a Canvas image',
-						btnTextonSelect: 'Change Canvas Image',
-					},
-					((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.canvas',
-					row
-				));
+				// // 
+				// // Preview + Upload Button
+				// config.appendChild(thisClass.image_button_preview(
+				// 	{
+				// 		subObj: 'canvas',
+				// 		popConfirm: 'Use this Image',
+				// 		btnText: 'Select Canvas Image',
+				// 		popTitle: 'Select a Canvas image',
+				// 		btnTextonSelect: 'Change Canvas Image',
+				// 	},
+				// 	((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.canvas',
+				// 	row
+				// ));
 				// 
 				// config.appendChild(thisClass.imagePreview(row?.thumbUrl??''));
 				// el.dataset.optionGroup;
 				// label = document.createElement('label');label.classList.add('form-label');label.innerHTML = 'Label';
 				// 
-				var fcontrol = document.createElement('div');fcontrol.classList.add('w-half');
-				var gHidden = document.createElement('input');gHidden.classList.add('form-control');
-				gHidden.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.gallery';gHidden.type = 'hidden';
-				gHidden.setAttribute('value', JSON.stringify(row?.gallery??[]));config.appendChild(gHidden);
-				var gallery = document.createElement('button');gallery.classList.add('btn', 'button', 'w-half');
-				gallery.type = 'button';gallery.innerHTML = 'Gallery Setup';
-				gallery.addEventListener('click', (event) => {
-					event.preventDefault();
-					let currentConfig = row?.gallery??[];
-					Swal.fire({
-						focusConfirm: false,
-						showCloseButton: true,
-						showCancelButton: true,
-						title: `Gallery ${headtext.innerHTML}`,
-						html: '<div id="topushnewgallery"></div>',
-						confirmButtonText: thisClass.i18n?.update??'Update',
-						allowOutsideClick: () => false,
-						didOpen: () => {
-							const body = Swal.getPopup().querySelector("#topushnewgallery");
-							var gallerycont = document.createElement('div');
-							gallerycont.classList.add('gallery-container');
-							var gallerywrap = document.createElement('div');
-							gallerywrap.classList.add('gallery-wrap');
-							var galleryrow = document.createElement('div');
-							galleryrow.classList.add('gallery-row');
-							/**
-							 * A lot of task here...
-							 */
-							var galleryItemHtml = (item, index) => {
-								var gcard = document.createElement('div');
-								gcard.classList.add('gallery-card');
-								var gwrap = document.createElement('div');
-								gwrap.classList.add('gallery-card-wrap');
-								var gimg = document.createElement('div');
-								gimg.classList.add('gallery-card-img', 'imgpreview');
-								var img = document.createElement('img');
-								img.alt = item.title;
-								img.src = item?.thumbUrl??'';
-								var remove = document.createElement('div');
-								remove.classList.add('dashicons-before', 'dashicons-dismiss');
-								remove.title = thisClass.i18n?.remove??'Remove';
-								remove.addEventListener('click', (event) => {
-									event.preventDefault();
-									if (confirm('Are you sure you want to remove this item?')) {
-										console.log(currentConfig)
-										currentConfig.filter(row => row.id === item.id);
-										gcard.remove();
-										console.log(currentConfig)
-									}
-								});
-								gimg.appendChild(img);gimg.appendChild(remove);gwrap.appendChild(gimg);gcard.appendChild(gwrap);
-								return gcard;
-							};
-							// 
-							(row?.gallery??[]).forEach((item, index) => {
-								galleryrow.appendChild(galleryItemHtml(item, index));
-							});
-							// 
-							gallerywrap.appendChild(galleryrow);
-							var galleryfoot = document.createElement('div');
-							galleryfoot.classList.add('gallery-card-foot');
-							var button = document.createElement('button');
-							button.type = 'button';button.classList.add('btn', 'button');
-							button.innerHTML = button.title = 'Add Item';
-							button.addEventListener('click', (event) => {
-								event.preventDefault();
-								try {
-									if (typeof wp.media!=='undefined') {
-										var mediaUploader = wp.media({
-											title: 'Select / Upload a gallery Item',
-											button: {text: 'Use this Image'},
-											multiple: true
-										});
-										mediaUploader.on('select', function() {
-											mediaUploader.state().get('selection').map(attachment => {
-												attachment = attachment.toJSON();
-												if (attachment.type !== 'image') {
-													throw new Error('You can only upload images as gallery item');
-												}
-												if (!currentConfig.find(item => item.id === attachment.id)) {
-													var item = {
-														id: attachment.id,
-														title: attachment.title,
-														// imageUrl: attachment.url,
-														thumbUrl: attachment.sizes?.thumbnail?.url??'',
-														filename: attachment?.filename??'',
-													};
-													currentConfig.push(item);
-													galleryrow.appendChild(galleryItemHtml(item, (currentConfig.length + 1)));
-												} else {
-													throw new Error('You can\'t import same image file twice.');
-												}
-											});
-										});
-										mediaUploader.open();
-									} else {
-										throw new Error('WordPress media library not initialized.');
-									}
-								} catch (error) {
-									console.log(error);
-								}
-							});
-							galleryfoot.appendChild(button);
-							gallerywrap.appendChild(galleryfoot);
-							gallerycont.appendChild(gallerywrap);
-							body.appendChild(gallerycont);
-						}
-					}).then((result) => {
-						// console.log(result);
-						if (result?.isConfirmed) {
-							if (currentConfig) {
-								gHidden.value = JSON.stringify(currentConfig);
-							}
-						}
-						// if (result.dismiss === Swal.DismissReason.timer) {
-						//   console.log("I was closed by the timer");
-						// }
-					});
-				});
-				fcontrol.appendChild(gallery);config.appendChild(fcontrol);
+				// Gallery Section
+				// var fcontrol = document.createElement('div');fcontrol.classList.add('w-half');
+				// var gHidden = document.createElement('input');gHidden.classList.add('form-control');
+				// gHidden.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.gallery';gHidden.type = 'hidden';
+				// gHidden.setAttribute('value', JSON.stringify(row?.gallery??[]));config.appendChild(gHidden);
+				// var gallery = document.createElement('button');gallery.classList.add('btn', 'button', 'w-half');
+				// gallery.type = 'button';gallery.innerHTML = 'Gallery Setup';
+				// gallery.addEventListener('click', (event) => {
+				// 	event.preventDefault();
+				// 	let currentConfig = row?.gallery??[];
+				// 	Swal.fire({
+				// 		focusConfirm: false,
+				// 		showCloseButton: true,
+				// 		showCancelButton: true,
+				// 		title: `Gallery ${headtext.innerHTML}`,
+				// 		html: '<div id="topushnewgallery"></div>',
+				// 		confirmButtonText: thisClass.i18n?.update??'Update',
+				// 		allowOutsideClick: () => false,
+				// 		didOpen: () => {
+				// 			const body = Swal.getPopup().querySelector("#topushnewgallery");
+				// 			var gallerycont = document.createElement('div');
+				// 			gallerycont.classList.add('gallery-container');
+				// 			var gallerywrap = document.createElement('div');
+				// 			gallerywrap.classList.add('gallery-wrap');
+				// 			var galleryrow = document.createElement('div');
+				// 			galleryrow.classList.add('gallery-row');
+				// 			/**
+				// 			 * A lot of task here...
+				// 			 */
+				// 			var galleryItemHtml = (item, index) => {
+				// 				var gcard = document.createElement('div');
+				// 				gcard.classList.add('gallery-card');
+				// 				var gwrap = document.createElement('div');
+				// 				gwrap.classList.add('gallery-card-wrap');
+				// 				var gimg = document.createElement('div');
+				// 				gimg.classList.add('gallery-card-img', 'imgpreview');
+				// 				var img = document.createElement('img');
+				// 				img.alt = item.title;
+				// 				img.src = item?.thumbUrl??'';
+				// 				var remove = document.createElement('div');
+				// 				remove.classList.add('dashicons-before', 'dashicons-dismiss');
+				// 				remove.title = thisClass.i18n?.remove??'Remove';
+				// 				remove.addEventListener('click', (event) => {
+				// 					event.preventDefault();
+				// 					if (confirm('Are you sure you want to remove this item?')) {
+				// 						console.log(currentConfig)
+				// 						currentConfig.filter(row => row.id === item.id);
+				// 						gcard.remove();
+				// 						console.log(currentConfig)
+				// 					}
+				// 				});
+				// 				gimg.appendChild(img);gimg.appendChild(remove);gwrap.appendChild(gimg);gcard.appendChild(gwrap);
+				// 				return gcard;
+				// 			};
+				// 			// 
+				// 			(row?.gallery??[]).forEach((item, index) => {
+				// 				galleryrow.appendChild(galleryItemHtml(item, index));
+				// 			});
+				// 			// 
+				// 			gallerywrap.appendChild(galleryrow);
+				// 			var galleryfoot = document.createElement('div');
+				// 			galleryfoot.classList.add('gallery-card-foot');
+				// 			var button = document.createElement('button');
+				// 			button.type = 'button';button.classList.add('btn', 'button');
+				// 			button.innerHTML = button.title = 'Add Item';
+				// 			button.addEventListener('click', (event) => {
+				// 				event.preventDefault();
+				// 				try {
+				// 					if (typeof wp.media!=='undefined') {
+				// 						var mediaUploader = wp.media({
+				// 							title: 'Select / Upload a gallery Item',
+				// 							button: {text: 'Use this Image'},
+				// 							multiple: true
+				// 						});
+				// 						mediaUploader.on('select', function() {
+				// 							mediaUploader.state().get('selection').map(attachment => {
+				// 								attachment = attachment.toJSON();
+				// 								if (attachment.type !== 'image') {
+				// 									throw new Error('You can only upload images as gallery item');
+				// 								}
+				// 								if (!currentConfig.find(item => item.id === attachment.id)) {
+				// 									var item = {
+				// 										id: attachment.id,
+				// 										title: attachment.title,
+				// 										// imageUrl: attachment.url,
+				// 										thumbUrl: attachment.sizes?.thumbnail?.url??'',
+				// 										filename: attachment?.filename??'',
+				// 									};
+				// 									currentConfig.push(item);
+				// 									galleryrow.appendChild(galleryItemHtml(item, (currentConfig.length + 1)));
+				// 								} else {
+				// 									throw new Error('You can\'t import same image file twice.');
+				// 								}
+				// 							});
+				// 						});
+				// 						mediaUploader.open();
+				// 					} else {
+				// 						throw new Error('WordPress media library not initialized.');
+				// 					}
+				// 				} catch (error) {
+				// 					console.log(error);
+				// 				}
+				// 			});
+				// 			galleryfoot.appendChild(button);
+				// 			gallerywrap.appendChild(galleryfoot);
+				// 			gallerycont.appendChild(gallerywrap);
+				// 			body.appendChild(gallerycont);
+				// 		}
+				// 	}).then((result) => {
+				// 		// console.log(result);
+				// 		if (result?.isConfirmed) {
+				// 			if (currentConfig) {
+				// 				gHidden.value = JSON.stringify(currentConfig);
+				// 			}
+				// 		}
+				// 		// if (result.dismiss === Swal.DismissReason.timer) {
+				// 		//   console.log("I was closed by the timer");
+				// 		// }
+				// 	});
+				// });
+				// fcontrol.appendChild(gallery);
+
+				config.appendChild(fcontrol);
 				// 
 				// group.appendChild(label);
 				el.dataset.order = (order+1);

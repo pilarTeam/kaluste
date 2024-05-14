@@ -1,9 +1,7 @@
-// import Customizer from './customizer';
 import Swal from 'sweetalert2';
-// import 'sweetalert2/src/sweetalert2.scss'
-import Sortable from 'sortable';
+import tippy from 'tippy.js';
+import Sortable from 'sortablejs';
 import Post from "../modules/post";
-// import Toastify from 'toastify-js';
 
 (function ($) {
 	class BackendCustomizer {
@@ -16,6 +14,10 @@ import Post from "../modules/post";
 			this.Sortable = Sortable;
 			this.customier = {
 				tabset: [],
+				sortables: {
+					blocks: [],
+					options: [],
+				},
 				actionBtns: {},
 				contextBtns: {},
 				contextmenu: false
@@ -95,10 +97,28 @@ import Post from "../modules/post";
 								customizer.classList.toggle('expanded');
 							});
 							break;
+						case 'toggletabs':
+							document.querySelectorAll('.customizer__state__tabs').forEach(customizer => {
+								customizer.classList.toggle('toggle-all');
+							});
+							break;
 						default:
 							break;
 					}
-				})
+				});
+				switch (button.dataset?.action) {
+					case 'update':
+						tippy(button, {content: 'Update this configuration'});
+						break;
+					case 'expand':
+						tippy(button, {content: 'Expand/Collapse full screen'});
+						break;
+					case 'toggletabs':
+						tippy(button, {content: 'Toggle all tabs'});
+						break;
+					default:
+						break;
+				}
 			});
 			document.querySelectorAll('#publish').forEach(publish => {
 				publish.addEventListener('click', (event) => {
@@ -164,8 +184,16 @@ import Post from "../modules/post";
 			jQuery(tabNavs).sortable();
 			document.querySelector('.customizer__header__title').appendChild(tabNavs);
 			var tabs = thisClass.customier.tabs = document.createElement('div');tabs.classList.add('customizer__state__tabs');
+			thisClass.customier.sortables.tabs = new Sortable(tabs, {
+				animation: 150,
+				dragoverBubble: false,
+				easing: "cubic-bezier(1, 0, 0, 1)",
+				handle: '.customizer__state__tab__header',
+			});
 			tabsList.forEach((tab, i) => {
-				tabs.appendChild(thisClass.new_tab(tab.args, tab?.data??[]));
+				if (tab?.args || tab?.data) {
+					tabs.appendChild(thisClass.new_tab(tab?.args??{}, tab?.data??[]));
+				}
 			});
 			return tabs;
 		}
@@ -228,6 +256,7 @@ import Post from "../modules/post";
 			headTitle.classList.add('customizer__state__tab__header__title');
 			var headtext = document.createElement('span');
 			headtext.innerHTML = tabargs?.title??'New Tab';
+			tippy(headtext, {content: 'Double click to edit.'});
 			var headTextEdit = document.createElement('input');
 			headTextEdit.type = 'text';headTextEdit.classList.add('form-control');
 			headTextEdit.setAttribute('value', tabargs?.title??'New Tab');
@@ -249,14 +278,22 @@ import Post from "../modules/post";
 			// 
 			var headActs = document.createElement('div');
 			headActs.classList.add('customizer__state__tab__header__actions');
+			var headActCllps = document.createElement('span');
+			headActCllps.classList.add('dashicons-before', 'dashicons-sort');
+			tippy(headActCllps, {content: 'Collapse all blocks'});
 			var headActTgl = document.createElement('span');
 			headActTgl.classList.add('dashicons-before', 'dashicons-arrow-up');
+			tippy(headActTgl, {content: 'Collapse this tab'});
 			var headActTrash = document.createElement('span');
 			headActTrash.classList.add('dashicons-before', 'dashicons-trash');
+			tippy(headActTrash, {content: 'Remove this tab'});
 			headActTrash.addEventListener('click', (event) => {
 				event.preventDefault();
 				if (confirm('Are you sure you want to remove this tab?')) {
-					tab.remove();
+					thisClass.customier.pendingSubmission = true;tab.remove();
+					var indexedTab = thisClass.customier.tabset.findIndex((tab, index) => tab?.args && tab.args.id == tabargs.id);
+					console.log('indexedTab', [indexedTab, thisClass.customier.tabset[indexedTab]]);
+					delete thisClass.customier.tabset[indexedTab];
 				}
 			});
 			// 
@@ -304,12 +341,7 @@ import Post from "../modules/post";
 						stateFields.appendChild(field);
 						thisClass.init_intervalevent();
 					}
-					// if (result.dismiss === Swal.DismissReason.timer) {
-					//   console.log("I was closed by the timer");
-					// }
 				});
-				// body.appendChild(template);
-				// console.log(event.target.innerHTML);
 			});
 			headActTgl.addEventListener('click', (event) => {
 				event.preventDefault();
@@ -323,7 +355,13 @@ import Post from "../modules/post";
 					headActTgl.classList.remove('dashicons-arrow-down');
 				}
 			});
-			headActs.appendChild(headActTgl);headActs.appendChild(headActTrash);
+			headActCllps.addEventListener('click', (event) => {
+				event.preventDefault();
+				body.classList.toggle('toggle-all');
+			});
+			headActs.appendChild(headActCllps);
+			// headActs.appendChild(headActTgl);
+			headActs.appendChild(headActTrash);
 			// 
 			footActions.appendChild(button);footer.appendChild(footActions);
 			// 
@@ -480,6 +518,7 @@ import Post from "../modules/post";
 			var tab = document.createElement('form');tab.classList.add('customize__step');header = true;
 			tab.action = '';tab.method = 'post';tab.id = 'popupstepform_'+thisClass.currentFieldID;
 			// head = document.createElement('h2');head.innerHTML=field;tab.appendChild(head);
+			
 			body = document.createElement('div');body.classList.add('customize__step__body');
 			if (header) {
 				head = document.createElement('div');head.classList.add('customize__step__header');
@@ -492,6 +531,7 @@ import Post from "../modules/post";
 				// 
 				var actions = document.createElement('div');actions.classList.add('customize__step__header__actions');
 				var toggle = document.createElement('span');toggle.classList.add('dashicons-before', 'dashicons-arrow-up');
+				tippy(toggle, {content: 'Toggle this block'});
 				toggle.addEventListener('click', (event) => {
 					event.preventDefault();
                     switch (head.dataset?.status) {
@@ -512,6 +552,7 @@ import Post from "../modules/post";
 				// 
 				remove = document.createElement('span');remove.title = 'Remove';
 				remove.classList.add('customize__step__header__remove', 'dashicons-before', 'dashicons-trash');
+				tippy(remove, {content: 'Remove this block'});
 				input = document.createElement('input');input.type='hidden';input.name = 'type';input.setAttribute('value', data?.type??field.type);
 				remove.addEventListener('click', (event) => {
 					event.preventDefault();
@@ -603,14 +644,15 @@ import Post from "../modules/post";
 				case 'input':case 'text':case 'number':case 'date':case 'time':case 'local':case 'color':case 'range':
 					fieldset = document.createElement('div');fieldset.classList.add('form-group');
 
-					input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.type = data?.type??field.type;
-					input.id = 'thefield'+thisClass.lastfieldID;
-					input.setAttribute('value', data?.placeholder??'');
-					input.name = 'placeholder';input.placeholder = thisClass.i18n?.placeholder_text??'Placeholder text';
-					label = document.createElement('label');label.classList.add('form-label');
-					label.setAttribute('for', input.id);
-					label.innerHTML = thisClass.i18n?.placeholder_ordefault??'Placeholder / Default value';
-					fieldset.appendChild(label);fieldset.appendChild(input);
+					// input = document.createElement('input');input.classList.add('form-control', 'form-control-'+field.type);input.type = data?.type??field.type;
+					// input.id = 'thefield'+thisClass.lastfieldID;
+					// input.setAttribute('value', data?.placeholder??'');
+					// input.name = 'placeholder';input.placeholder = thisClass.i18n?.placeholder_text??'Placeholder text';
+					// label = document.createElement('label');label.classList.add('form-label');
+					// label.setAttribute('for', input.id);
+					// label.innerHTML = thisClass.i18n?.placeholder_ordefault??'Placeholder / Default value';
+					// fieldset.appendChild(label);fieldset.appendChild(input);
+
 					body.appendChild(fieldset);
 					break;
 				case 'select':case 'radio':case 'checkbox':case 'image':
@@ -632,6 +674,16 @@ import Post from "../modules/post";
 					// fieldset.appendChild(label);fieldset.appendChild(input);
 					var repeaters = document.createElement('div');repeaters.classList.add('single-repeater-options');
 					repeaters.innerHTML = '<h5 class="h5">Options</h5>';
+					
+					thisClass.customier.sortables.options.push(
+						new Sortable(repeaters, {
+							animation: 150,
+							filter: 'h5.h5',
+							dragoverBubble: false,
+							easing: "cubic-bezier(1, 0, 0, 1)",
+							handle: '.single-repeater-headtext',
+						})
+					);
 					fieldset.appendChild(repeaters);
 					/**
 					 * Reapeter fields
@@ -648,6 +700,7 @@ import Post from "../modules/post";
 					fieldset.appendChild(input);
 					
 					(data?.options??[]).forEach(option => {
+						option.rootType = data?.type;
 						thisClass.do_repeater(fieldset.querySelector('.do_repeater_field'), option, false);
 					});
 					/**
@@ -662,6 +715,14 @@ import Post from "../modules/post";
 					break;
 			}
 			tab.appendChild(body);
+			thisClass.customier.sortables.blocks.push(
+				new Sortable(tab, {
+					animation: 150,
+					dragoverBubble: false,
+					easing: "cubic-bezier(1, 0, 0, 1)",
+					handle: '.customize__step__header',
+				})
+			);
 			return tab;
 		}
 		doto_field(type) {
@@ -698,7 +759,7 @@ import Post from "../modules/post";
 		get_fields() {
 			return {
 				// types: ['text', 'number', 'date', 'time', 'local', 'color', 'range', 'textarea', 'select', 'radio', 'checkbox']
-				types: ['text', 'textarea', 'radio', 'checkbox', 'image']
+				types: ['text', 'radio', 'image']
 			};
 		}
 		do_repeater(el, row, groupAt) {
@@ -720,12 +781,13 @@ import Post from "../modules/post";
 				// });
 				var headacts = document.createElement('div');headacts.classList.add('single-repeater-headacts');
 				var title = document.createElement('span');title.classList.add('single-repeater-headtext-title');
-				remover = document.createElement('span');remover.classList.add('dashicons-before', 'dashicons-trash');remover.title = 'Remove';
+				remover = document.createElement('span');remover.classList.add('dashicons-before', 'dashicons-trash');tippy(remover, {content: 'Remove this Item'});
 				remover.addEventListener('click', (event) => {
 					event.preventDefault();
 					if (confirm('Are you sure you want to remove this item?')) {wrap.remove();}
 				});
-				var HActToggle = document.createElement('span');HActToggle.classList.add('dashicons-before', 'dashicons-arrow-up');HActToggle.title = 'Remove';
+				var HActToggle = document.createElement('span');HActToggle.classList.add('dashicons-before', 'dashicons-arrow-up');
+				tippy(HActToggle, {content: 'Toggle this Item'});
 				HActToggle.addEventListener('click', (event) => {
 					event.preventDefault();
 					if (wrap.classList.contains('show-configs')) {
@@ -767,18 +829,19 @@ import Post from "../modules/post";
 				fcontrol.appendChild(input);config.appendChild(fcontrol);
 				// 
 				// Preview + Upload Button
-				// if (true) {}
-				config.appendChild(thisClass.image_button_preview(
-					{
-						subObj: 'thumb',
-						btnText: 'Select Image',
-						popConfirm: 'Use this Image',
-						popTitle: 'Select an image',
-						btnTextonSelect: 'Change Image',
-					},
-					((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.thumb',
-					row
-				));
+				if (['image'].includes(row?.rootType)) {
+					config.appendChild(thisClass.image_button_preview(
+						{
+							subObj: 'thumb',
+							btnText: 'Select Image',
+							popConfirm: 'Use this Image',
+							popTitle: 'Select an image',
+							btnTextonSelect: 'Change Image',
+						},
+						((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.thumb',
+						row
+					));
+				}
 				// // 
 				// // Preview + Upload Button
 				// config.appendChild(thisClass.image_button_preview(
@@ -959,7 +1022,8 @@ import Post from "../modules/post";
 			name = src.split('/');name = name[(name.length-1)];
 			
 			cross = document.createElement('div');cross.classList.add('dashicons-before', 'dashicons-dismiss');
-			cross.title = thisClass.i18n?.remove??'Remove';
+			// cross.title = thisClass.i18n?.remove??'Remove';
+			tippy(remover, {content: 'Remove this image'});
 			image = document.createElement('img');image.src = src;image.alt = name;
 			preview.appendChild(image);preview.appendChild(cross);return preview;
 		}

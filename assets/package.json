@@ -79,6 +79,7 @@
 		"sortablejs": "^1.15.2",
 		"sweetalert2": "^11.11.0",
 		"terser-webpack-plugin": "^4.2.3",
+		"tippy.js": "^6.3.7",
 		"toastify-js": "^1.12.0"
 	}
 }

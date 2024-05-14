@@ -201,8 +201,13 @@ class Woocommerce {
 				<div class="customizer__container">
 					<div class="customizer__wrapper">
 						<div class="customizer__header">
-							<div class="customizer__header__title"></div>
+							<div class="customizer__header__title">
+								<h3><?php esc_html_e('Product Customization', 'kaluste'); ?></h3>
+							</div>
 							<div class="customizer__header__actions">
+								<button type="button" class="btn button" data-action="toggletabs">
+									<span class="dashicons-before dashicons-sort"></span>
+								</button>
 								<button type="button" class="btn button" data-action="update">
 									<span><?php echo esc_html(__('Update', 'kaluste')); ?></span>
 									<div class="spinner-material"></div>

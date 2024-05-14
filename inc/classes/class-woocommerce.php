@@ -127,53 +127,53 @@ class Woocommerce {
 	 */
 	protected function get_product_data_fields() {
 		$fields = [
-			'_customized_title'	=> [
-				'default'     => '',
-				// 'required'	  => true,
-				'type'				=> 'text',
-				'label'				=> esc_html__('Customization title', 'kaluste'),
-				'description'		=> esc_html__('Enter customization panel title here', 'kaluste'),
-				'placeholder'		=> esc_html__('Customization', 'kaluste'),
-				'wrapper_class'		=> 'show_customizedple',
-				'desc_tip'			=> esc_html__('Enter customization screen title that will apear obove the customization screen.', 'kaluste')
-			],
-			'_customized_desc'	=> [
-				'default'     => '',
-				// 'required'	  => true,
-				'type'				=> 'text',
-				'label'				=> esc_html__('Customization Description', 'kaluste'),
-				'description'		=> esc_html__('Enter customization panel description here', 'kaluste'),
-				'placeholder'		=> esc_html__('Description goes here...', 'kaluste'),
-				// 'wrapper_class'		=> 'show_if_customized',
-				// 'desc_tip'			=> esc_html__('Enter customization screen description that will apear obove the customization screen.', 'kaluste')
-			],
-			'_customized_desc'	=> [
-				'default'			=> '',
-				// 'required'		=> true,
-				'type'				=> 'text',
-				'label'				=> esc_html__('Customization Description', 'kaluste'),
-				'description'		=> esc_html__('Enter customization panel description here', 'kaluste'),
-				'placeholder'		=> esc_html__('Description goes here...', 'kaluste'),
-				// 'wrapper_class'		=> 'show_if_customized',
-				// 'desc_tip'			=> esc_html__('Enter customization screen description that will apear obove the customization screen.', 'kaluste')
-			],
-			'_customized_preload'	=> [
-				'default'			=> '',
-				// 'required'	  	=> true,
-				'type'				=> 'checkbox',
-				'label'				=> esc_html__('Preloader', 'kaluste'),
-				'description'		=> esc_html__('Select a preloader type', 'kaluste'),
-				// 'placeholder'		=> esc_html__('Description goes here...', 'kaluste'),
-				// 'wrapper_class'		=> 'show_if_customized',
-				// 'desc_tip'			=> esc_html__('Enter customization screen description that will apear obove the customization screen.', 'kaluste'),
-				'options'			=> [
-					'option1'	=> 'option1',
-					'option2'	=> 'option2',
-					'option3'	=> 'option3',
-					'option4'	=> 'option4',
-					// ['key' => 'Option 1', 'value' => '1']
-				]
-			],
+			// '_customized_title'	=> [
+			// 	'default'     => '',
+			// 	// 'required'	  => true,
+			// 	'type'				=> 'text',
+			// 	'label'				=> esc_html__('Customization title', 'kaluste'),
+			// 	'description'		=> esc_html__('Enter customization panel title here', 'kaluste'),
+			// 	'placeholder'		=> esc_html__('Customization', 'kaluste'),
+			// 	'wrapper_class'		=> 'show_customizedple',
+			// 	'desc_tip'			=> esc_html__('Enter customization screen title that will apear obove the customization screen.', 'kaluste')
+			// ],
+			// '_customized_desc'	=> [
+			// 	'default'     => '',
+			// 	// 'required'	  => true,
+			// 	'type'				=> 'text',
+			// 	'label'				=> esc_html__('Customization Description', 'kaluste'),
+			// 	'description'		=> esc_html__('Enter customization panel description here', 'kaluste'),
+			// 	'placeholder'		=> esc_html__('Description goes here...', 'kaluste'),
+			// 	// 'wrapper_class'		=> 'show_if_customized',
+			// 	// 'desc_tip'			=> esc_html__('Enter customization screen description that will apear obove the customization screen.', 'kaluste')
+			// ],
+			// '_customized_desc'	=> [
+			// 	'default'			=> '',
+			// 	// 'required'		=> true,
+			// 	'type'				=> 'text',
+			// 	'label'				=> esc_html__('Customization Description', 'kaluste'),
+			// 	'description'		=> esc_html__('Enter customization panel description here', 'kaluste'),
+			// 	'placeholder'		=> esc_html__('Description goes here...', 'kaluste'),
+			// 	// 'wrapper_class'		=> 'show_if_customized',
+			// 	// 'desc_tip'			=> esc_html__('Enter customization screen description that will apear obove the customization screen.', 'kaluste')
+			// ],
+			// '_customized_preload'	=> [
+			// 	'default'			=> '',
+			// 	// 'required'	  	=> true,
+			// 	'type'				=> 'checkbox',
+			// 	'label'				=> esc_html__('Preloader', 'kaluste'),
+			// 	'description'		=> esc_html__('Select a preloader type', 'kaluste'),
+			// 	// 'placeholder'		=> esc_html__('Description goes here...', 'kaluste'),
+			// 	// 'wrapper_class'		=> 'show_if_customized',
+			// 	// 'desc_tip'			=> esc_html__('Enter customization screen description that will apear obove the customization screen.', 'kaluste'),
+			// 	'options'			=> [
+			// 		'option1'	=> 'option1',
+			// 		'option2'	=> 'option2',
+			// 		'option3'	=> 'option3',
+			// 		'option4'	=> 'option4',
+			// 		// ['key' => 'Option 1', 'value' => '1']
+			// 	]
+			// ],
 		];
 		return $fields;
 	}

@@ -1,25 +1,25 @@
 <?php
 /**
- * This plugin ordered by a client and done by Remal Mahmud (github.com/mahmudremal). Authority dedicated to that cient.
+ * This plugin ordered by a client and done by Remal Mahmud (github.com/pilarTeam). Authority dedicated to that cient.
  *
  * @wordpress-plugin
  * Plugin Name:       Kaluste Customized Furniture
- * Plugin URI:        https://github.com/mahmudremal/woocommerce-flutterwave-payment/
+ * Plugin URI:        https://github.com/pilarTeam/noste/
  * Description:       Customized furniture builder specialy build for kaluste comes with customizing option for furniture builder to order completed process.
  * Version:           1.0.0
  * Requires at least: 6.2
  * Requires PHP:      7.4
- * Author:            Remal Mahmud
- * Author URI:        https://github.com/mahmudremal/
+ * Author:            pilarTeam
+ * Author URI:        https://github.com/pilarTeam/
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       kaluste
  * Domain Path:       /languages
  * 
  * @package Kaluste
- * @author  Remal Mahmud (https://github.com/mahmudremal)
+ * @author  Remal Mahmud (https://github.com/pilarTeam)
  * @version 1.0.2
- * @link https://github.com/mahmudremal/woocommerce-flutterwave-payment/
+ * @link https://github.com/pilarTeam/noste/
  * @category	WordPress Plugin
  * @copyright	Copyright (c) 2024-26
  * 

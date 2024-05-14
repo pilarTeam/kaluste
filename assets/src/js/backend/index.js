@@ -489,6 +489,27 @@ import Post from "../modules/post";
 				span.dataset.type = data?.type??field.type;
 				span.innerHTML = (!(data?.heading))?`${(data?.type??field.type).toUpperCase()}`:`${data?.heading??''} - ${(data?.type??field.type).toUpperCase()}`;
 				head.appendChild(span);head.appendChild(input);
+				// 
+				var actions = document.createElement('div');actions.classList.add('customize__step__header__actions');
+				var toggle = document.createElement('span');toggle.classList.add('dashicons-before', 'dashicons-arrow-up');
+				toggle.addEventListener('click', (event) => {
+					event.preventDefault();
+                    switch (head.dataset?.status) {
+						case 'shown':
+							head.dataset.status = 'hidden';
+							toggle.classList.add('dashicons-arrow-down');
+							toggle.classList.remove('dashicons-arrow-up');
+							jQuery(body).slideUp();
+							break;
+						default:
+							head.dataset.status = 'shown';
+							toggle.classList.add('dashicons-arrow-up');
+							toggle.classList.remove('dashicons-arrow-down');
+							jQuery(body).slideDown();
+							break;
+					}
+				});
+				// 
 				remove = document.createElement('span');remove.title = 'Remove';
 				remove.classList.add('customize__step__header__remove', 'dashicons-before', 'dashicons-trash');
 				input = document.createElement('input');input.type='hidden';input.name = 'type';input.setAttribute('value', data?.type??field.type);
@@ -496,20 +517,21 @@ import Post from "../modules/post";
 					event.preventDefault();
 					if (confirm(thisClass.i18n?.areusure??'Are you sure?')) {tab.remove();}
 				});
-				head.addEventListener('click', (event) => {
-					event.preventDefault();
-					switch(head.dataset.status) {
-						case 'shown':
-							head.dataset.status = 'hidden';
-							jQuery(body).slideUp();
-							break;
-						default:
-							head.dataset.status = 'shown';
-							jQuery(body).slideDown();
-							break;
-					}
-				});
-				head.appendChild(input);head.appendChild(remove);tab.appendChild(head);
+				actions.appendChild(toggle);actions.appendChild(remove);
+				// head.addEventListener('click', (event) => {
+				// 	event.preventDefault();
+				// 	switch (head.dataset?.status) {
+				// 		case 'shown':
+				// 			head.dataset.status = 'hidden';
+				// 			jQuery(body).slideUp();
+				// 			break;
+				// 		default:
+				// 			head.dataset.status = 'shown';
+				// 			jQuery(body).slideDown();
+				// 			break;
+				// 	}
+				// });
+				head.appendChild(input);head.appendChild(actions);tab.appendChild(head);
 			}
 			if (false && field.steptitle) {
 				thisClass.lastfieldID++;
@@ -745,6 +767,7 @@ import Post from "../modules/post";
 				fcontrol.appendChild(input);config.appendChild(fcontrol);
 				// 
 				// Preview + Upload Button
+				// if (true) {}
 				config.appendChild(thisClass.image_button_preview(
 					{
 						subObj: 'thumb',

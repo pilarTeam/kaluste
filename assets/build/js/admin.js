@@ -19539,6 +19539,30 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           span.innerHTML = !(data !== null && data !== void 0 && data.heading) ? "".concat(((_data$type2 = data === null || data === void 0 ? void 0 : data.type) !== null && _data$type2 !== void 0 ? _data$type2 : field.type).toUpperCase()) : "".concat((_data$heading = data === null || data === void 0 ? void 0 : data.heading) !== null && _data$heading !== void 0 ? _data$heading : '', " - ").concat(((_data$type3 = data === null || data === void 0 ? void 0 : data.type) !== null && _data$type3 !== void 0 ? _data$type3 : field.type).toUpperCase());
           head.appendChild(span);
           head.appendChild(input);
+          // 
+          var actions = document.createElement('div');
+          actions.classList.add('customize__step__header__actions');
+          var toggle = document.createElement('span');
+          toggle.classList.add('dashicons-before', 'dashicons-arrow-up');
+          toggle.addEventListener('click', function (event) {
+            var _head$dataset;
+            event.preventDefault();
+            switch ((_head$dataset = head.dataset) === null || _head$dataset === void 0 ? void 0 : _head$dataset.status) {
+              case 'shown':
+                head.dataset.status = 'hidden';
+                toggle.classList.add('dashicons-arrow-down');
+                toggle.classList.remove('dashicons-arrow-up');
+                jQuery(body).slideUp();
+                break;
+              default:
+                head.dataset.status = 'shown';
+                toggle.classList.add('dashicons-arrow-up');
+                toggle.classList.remove('dashicons-arrow-down');
+                jQuery(body).slideDown();
+                break;
+            }
+          });
+          // 
           remove = document.createElement('span');
           remove.title = 'Remove';
           remove.classList.add('customize__step__header__remove', 'dashicons-before', 'dashicons-trash');
@@ -19553,21 +19577,23 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               tab.remove();
             }
           });
-          head.addEventListener('click', function (event) {
-            event.preventDefault();
-            switch (head.dataset.status) {
-              case 'shown':
-                head.dataset.status = 'hidden';
-                jQuery(body).slideUp();
-                break;
-              default:
-                head.dataset.status = 'shown';
-                jQuery(body).slideDown();
-                break;
-            }
-          });
+          actions.appendChild(toggle);
+          actions.appendChild(remove);
+          // head.addEventListener('click', (event) => {
+          // 	event.preventDefault();
+          // 	switch (head.dataset?.status) {
+          // 		case 'shown':
+          // 			head.dataset.status = 'hidden';
+          // 			jQuery(body).slideUp();
+          // 			break;
+          // 		default:
+          // 			head.dataset.status = 'shown';
+          // 			jQuery(body).slideDown();
+          // 			break;
+          // 	}
+          // });
           head.appendChild(input);
-          head.appendChild(remove);
+          head.appendChild(actions);
           tab.appendChild(head);
         }
         if (false) { var _data$steptitle, _thisClass$i18n$custo, _thisClass$i18n9, _thisClass$i18n$custo2, _thisClass$i18n10; }
@@ -19878,6 +19904,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           config.appendChild(fcontrol);
           // 
           // Preview + Upload Button
+          // if (true) {}
           config.appendChild(thisClass.image_button_preview({
             subObj: 'thumb',
             btnText: 'Select Image',

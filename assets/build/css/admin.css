@@ -27,15 +27,6 @@
 /*
  * Base Scripts
  */
-.customizer.expanded {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 99999;
-  position: fixed;
-  background: #fff;
-}
 .customizer__container {
   width: 100%;
   height: 100%;
@@ -204,6 +195,7 @@
 .customizer__state__tab__footer__actions .btn {
   height: 30px;
   font-size: 14px;
+  min-height: unset;
   padding: 5px 10px;
   line-height: 16px;
 }
@@ -238,6 +230,37 @@
 }
 .customizer__addnew__input-group label {
   margin: unset !important;
+}
+.customizer.expanded {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  position: fixed;
+  background: #fff;
+}
+.customizer.expanded .customizer__container {
+  padding: unset;
+}
+.customizer.expanded .customizer__wrapper {
+  border: none;
+}
+.customizer.expanded .customizer__body {
+  padding: unset;
+}
+.customizer.expanded .customizer__body::-webkit-scrollbar {
+  width: 10px;
+}
+.customizer.expanded .customizer__body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.customizer.expanded .customizer__body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+.customizer.expanded .customizer__body::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 /*
@@ -283,6 +306,9 @@
 }
 .customize__step__header[data-status=hidden] {
   border-bottom: none;
+}
+.customize__step__header > input[name=fieldID] {
+  visibility: hidden;
 }
 .customize__step__header__text {
   font-size: 18px;
@@ -344,7 +370,7 @@
   border-radius: 7px;
   border: 1px solid rgba(221, 221, 221, 0.8666666667);
 }
-.customize__step__body > .form-group .single-repeater-options + do_repeater_field {
+.customize__step__body > .form-group .single-repeater-options + .do_repeater_field {
   width: 150px;
   color: #333;
   font-size: 16px;

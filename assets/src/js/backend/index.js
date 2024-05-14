@@ -14,7 +14,12 @@ import Post from "../modules/post";
 			this.ajaxNonce = fwpSiteConfig?.ajax_nonce??'';
 			this.i18n = {confirming: 'Confirming', ...i18n};
 			this.Sortable = Sortable;
-			this.customier = {tabset: []};
+			this.customier = {
+				tabset: [],
+				actionBtns: {},
+				contextBtns: {},
+				contextmenu: false
+			};
 			window.thisClass = this;
 			this.post = new Post(this);
 			this.setup_alerts();
@@ -69,9 +74,10 @@ import Post from "../modules/post";
 			}
 		}
 		setup_events() {
-			const thisClass = this;let isFullScreen = false;
+			const thisClass = this;
 			document.querySelectorAll('.customizer button[data-action]').forEach(button => {
 				thisClass.context_menu(button, 'actionBtn');
+				thisClass.customier.actionBtns[button.dataset?.action] = button;
 				button.addEventListener('click', (event) => {
 					event.preventDefault();
 					switch (button.dataset?.action) {
@@ -81,66 +87,37 @@ import Post from "../modules/post";
 							// if (thisClass.customier?.fields) {}
 							break;
 						case 'update':
-							button.classList.add('is_loading');
-							setTimeout(() => {
-								thisClass.customier.tabset = thisClass.customier.tabset.map(tab => {
-									tab.data = [...document.querySelectorAll('.customizer__state__tab[data-id="' + tab.args.id + '"] .customize__step')].map(tabForm => {
-										return thisClass.transformObjectKeys(Object.fromEntries(new FormData(tabForm)));
-									});
-									tab.data.map(block => {
-										if (block?.options) {
-											block.options = Object.values(block.options).map(option => {
-												if (option?.gallery) {
-													option.gallery = (option.gallery == '')?'[]':option.gallery;
-													try {
-														option.gallery = JSON.parse(option.gallery);
-													} catch (error) {
-														console.error(error);
-													}
-												}
-												return option;
-											});
-										}
-										return block;
-									});
-									return tab;
-								});
-								// 
-								var data = new FormData();
-								data.append('_nonce', thisClass.ajaxNonce);
-								data.append('tabset', JSON.stringify(thisClass.customier.tabset));
-								data.append('product_id', parseInt(thisClass.product_id));
-								data.append('action', 'kaluste/update/product/configuration');
-								thisClass.post.sendToServer(data, thisClass)
-								.then(response => {
-									button.classList.remove('is_loading');
-								})
-								.catch((err) => {
-									console.error("Error:", err);
-									button.classList.remove('is_loading');
-								});
-							}, 300);
+							thisClass.do_update_submission();
+							// setTimeout(() => {}, 300);
 							break;
 						case 'expand':
 							document.querySelectorAll('.customizer').forEach(customizer => {
 								customizer.classList.toggle('expanded');
-								// if (isFullScreen) {
-								// 	document.exitFullscreen()
-								// 	.then(() => {})
-								// 	.catch((err) => console.error(err));
-								// } else {
-								// 	customizer.requestFullscreen({navigationUI: "show"})
-								// 	.then(() => {})
-								// 	.catch((err) => console.error(err));
-								// }
-								// isFullScreen = !isFullScreen;
 							});
 							break;
 						default:
 							break;
 					}
 				})
-			})
+			});
+			document.querySelectorAll('#publish').forEach(publish => {
+				publish.addEventListener('click', (event) => {
+					// publish.dataset?.disabled == true || 
+					if (thisClass.customier?.pendingSubmission) {
+						event.preventDefault();
+						thisClass.do_update_submission()
+						.then(response => {
+							publish.click();
+						})
+						.catch((err) => {
+							console.error("Error:", err);
+							thisClass.toast.fire({icon: 'error', title: err.responseText, duration: 3000, stopOnFocus: true});
+						});
+					} else {
+						return true;
+					}
+				});
+			});
 		}
 		render_root(root) {
 			const thisClass = this;var html, data, product_id;
@@ -1027,16 +1004,15 @@ import Post from "../modules/post";
 		}
 		context_menu(elem, type) {
 			const thisClass = this;var ul, li, a, file;
-			thisClass.actionButtons = thisClass?.actionButtons??{};
 			if (!elem) {return;}
 			elem.dataset.context = true;
 			if (!(thisClass.customier?.contextmenu)) {
 				const contextMenu = thisClass.customier.contextmenu = document.createElement('div');
 				contextMenu.classList.add('contextmenu');
-				var ul = thisClass.actionButtons.list = document.createElement('ul');ul.classList.add('contextmenu__list');
+				var ul = thisClass.customier.contextBtns.list = document.createElement('ul');ul.classList.add('contextmenu__list');
 
 				// Update Menu
-				li = thisClass.actionButtons.update = document.createElement('li');li.classList.add('contextmenu__list__item');
+				li = thisClass.customier.contextBtns.update = document.createElement('li');li.classList.add('contextmenu__list__item');
 				a = document.createElement('a');a.href = '#';a.innerHTML = thisClass.i18n?.update??'Update';
 				a.addEventListener('click', (event) => {
 					event.preventDefault();
@@ -1044,7 +1020,7 @@ import Post from "../modules/post";
 				});
 				li.appendChild(a);ul.appendChild(li);
 				// Export Menu
-				li = thisClass.actionButtons.export = document.createElement('li');li.classList.add('contextmenu__list__item');
+				li = thisClass.customier.contextBtns.export = document.createElement('li');li.classList.add('contextmenu__list__item');
 				a = document.createElement('a');a.href = '#';a.innerHTML = thisClass.i18n?.export??'Export';
 				a.addEventListener('click', (event) => {
 					event.preventDefault();
@@ -1062,7 +1038,7 @@ import Post from "../modules/post";
 				});
 				li.appendChild(a);ul.appendChild(li);
 				// Import Menu
-				li = thisClass.actionButtons.import = document.createElement('li');li.classList.add('contextmenu__list__item');
+				li = thisClass.customier.contextBtns.import = document.createElement('li');li.classList.add('contextmenu__list__item');
 				file = document.createElement('input');file.type = 'file';
 				file.accept = '.json';file.style.display = 'none';
 				a = document.createElement('a');a.href = '#';a.innerHTML = thisClass.i18n?.import??'Import';
@@ -1078,12 +1054,7 @@ import Post from "../modules/post";
 									console.log('Identified', parsedData);
 									if (parsedData?.importable && parsedData?.imports) {
 										thisClass.isImporting = true;
-										var data = new FormData();
-										data.append('action', 'kaluste/update/product/configuration');
-										data.append('product_id', thisClass?.product_id);
-										data.append('tabset', JSON.stringify(parsedData.imports));
-										data.append('_nonce', thisClass.ajaxNonce);
-										thisClass.post.sendToServer(data, thisClass)
+										thisClass.do_update_submission(parsedData.imports)
 										.then(response => {
 											Swal.fire({
 												showCancelButton: true,
@@ -1146,10 +1117,10 @@ import Post from "../modules/post";
 					event.preventDefault();
 				});
 			}
-			var hideAll = () => [...thisClass.actionButtons.list.children].forEach(elem => elem.style.display = "none");
-			var showAll = () => [...thisClass.actionButtons.list.children].forEach(elem => elem.style.display = "block");
-			var hideOnly = (items) => {showAll();items.forEach(key => thisClass.actionButtons[key].style.display = "none");}
-			var showOnly = (items) => {hideAll();items.forEach(key => thisClass.actionButtons[key].style.display = "block");}
+			var hideAll = () => [...thisClass.customier.contextBtns.list.children].forEach(elem => elem.style.display = "none");
+			var showAll = () => [...thisClass.customier.contextBtns.list.children].forEach(elem => elem.style.display = "block");
+			var hideOnly = (items) => {showAll();items.forEach(key => thisClass.customier.contextBtns[key].style.display = "none");}
+			var showOnly = (items) => {hideAll();items.forEach(key => thisClass.customier.contextBtns[key].style.display = "block");}
 			elem.addEventListener("contextmenu", function(event) {
 				event.preventDefault();
 				thisClass.customier.contextmenu.style.left = event.clientX + "px";
@@ -1296,9 +1267,64 @@ import Post from "../modules/post";
 					input.innerHTML = input.dataset.innertext;
 				});
 			});
+			document.querySelectorAll('.customizer input:not([data-change-observer]), .customizer select:not([data-change-observer])').forEach(input => {
+				input.dataset.changeObserver = true;
+				input.addEventListener('change', (event) => {
+					thisClass.customier.pendingSubmission = true;
+					// document.querySelectorAll('#publish').forEach(publish => publish.dataset.disabled = true);
+				});
+			});
 		}
 		insertAfter(referenceNode, newNode) {
 			referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+		}
+		do_update_submission(imports = false) {
+			const thisClass = this;
+			return new Promise((resolve, reject) => {
+				thisClass.customier.actionBtns.update.classList.add('is_loading');
+				if (imports === false) {
+					thisClass.customier.tabset = thisClass.customier.tabset.map(tab => {
+						tab.data = [...document.querySelectorAll('.customizer__state__tab[data-id="' + tab.args.id + '"] .customize__step')].map(tabForm => {
+							return thisClass.transformObjectKeys(Object.fromEntries(new FormData(tabForm)));
+						});
+						tab.data.map(block => {
+							if (block?.options) {
+								block.options = Object.values(block.options).map(option => {
+									if (option?.gallery) {
+										option.gallery = (option.gallery == '')?'[]':option.gallery;
+										try {
+											option.gallery = JSON.parse(option.gallery);
+										} catch (error) {
+											console.error(error);
+										}
+									}
+									return option;
+								});
+							}
+							return block;
+						});
+						return tab;
+					});
+				}
+				// 
+				var data = new FormData();
+				data.append('_nonce', thisClass.ajaxNonce);
+				data.append('tabset', JSON.stringify((imports)?imports:thisClass.customier.tabset));
+				data.append('product_id', parseInt(thisClass.product_id));
+				data.append('action', 'kaluste/update/product/configuration');
+				thisClass.post.sendToServer(data, thisClass)
+				.then(response => {
+					thisClass.customier.actionBtns.update.classList.remove('is_loading');
+					thisClass.customier.pendingSubmission = false;
+					// document.querySelectorAll('#publish').forEach(publish => publish.dataset.disabled = false);
+					resolve(response);
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+					thisClass.customier.actionBtns.update.classList.remove('is_loading');
+					reject(error);
+				});
+			});
 		}
 	}
 	new BackendCustomizer();

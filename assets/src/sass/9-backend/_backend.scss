@@ -685,4 +685,6 @@
     border: 1px solid #ddd;
   }
 }
-
+.swal2-container.swal2-center.swal2-backdrop-show {
+    z-index: 9999999;
+}

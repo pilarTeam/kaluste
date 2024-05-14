@@ -49,6 +49,7 @@ class Assets {
 		global $post;
 		if(!in_array($curr_page, ['post-new.php', 'post.php', 'edit.php', 'order-terms'])) {return;}
 		wp_enqueue_style('kaluste-admin', KALUSTE_BUILD_CSS_URI . '/admin.css', [], $this->filemtime(KALUSTE_BUILD_CSS_DIR_PATH . '/admin.css'), 'all');
+		wp_enqueue_style('kaluste-style', KALUSTE_DIR_URI . '/assets/style.css', [], $this->filemtime(KALUSTE_BUILD_CSS_DIR_PATH . '/style.css'), 'all');
 		wp_enqueue_script('kaluste-admin', KALUSTE_BUILD_JS_URI . '/admin.js', ['jquery'], $this->filemtime(KALUSTE_BUILD_JS_DIR_PATH . '/admin.js'), true);
 		wp_localize_script('kaluste-admin', 'fwpSiteConfig', apply_filters('futurewordpress/project/ctto/javascript/siteconfig', [], true));
 	}

@@ -28,6 +28,12 @@
 /*
  * Base Scripts
  */
+.customizer * {
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
 .customizer__container {
   width: 100%;
   height: 100%;
@@ -73,10 +79,10 @@
   margin: auto;
   cursor: grab;
   font-size: 16px;
-  border-radius: 7px;
+  border-radius: 0px;
   background: #fff;
   width: 100% !important;
-  border: 1px solid rgba(221, 221, 221, 0.8666666667);
+  border: 1px solid #c9a670;
   background-color: transparent !important;
   user-select: none;
   -webkit-user-select: none;
@@ -84,7 +90,7 @@
   -ms-user-select: none;
 }
 .customizer__footer__tab.active, .customizer__header__tab.active {
-  border-radius: 7px;
+  border-radius: 0px;
   box-shadow: 0 0 7px rgba(216, 216, 216, 0.77);
 }
 .customizer__footer__tab.active .form-control, .customizer__header__tab.active .form-control {
@@ -106,6 +112,9 @@
 .customizer__footer__actions > button .dashicons-before, .customizer__header__actions > button .dashicons-before {
   display: flex;
   align-items: center;
+}
+.customizer__footer__actions > button .btn-color, .customizer__header__actions > button .btn-color {
+  fill: #FFFFFF;
 }
 .customizer__footer {
   border-bottom: unset;
@@ -131,7 +140,7 @@
 }
 .customizer__state__tab {
   width: 100%;
-  border: 1px solid rgba(221, 221, 221, 0.8666666667);
+  border: 1px solid #c9a670;
   box-shadow: 0 0 20px rgba(221, 221, 221, 0.3215686275);
 }
 .customizer__state__tab.active {
@@ -219,25 +228,56 @@
   padding: 10px 20px;
   border-radius: 10px;
   background: transparent;
-  border: 1px solid rgba(221, 221, 221, 0.8666666667);
+  border: 1px solid #c9a670;
   text-transform: uppercase;
 }
+.customizer__addnew__field {
+  margin: auto;
+  max-width: 300px;
+  padding: 10px 20px;
+  border: 1px solid #c9a670;
+  box-shadow: 0 0 15px rgba(221, 221, 221, 0.5294117647);
+  border-radius: 0px;
+}
 .customizer__addnew__form {
-  gap: 10px;
+  gap: 20px;
   display: flex;
   margin: 10px 0;
   margin-bottom: 30px;
   flex-direction: column;
-  font-family: sans-serif;
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
 .customizer__addnew__input-group {
-  gap: 10px;
+  gap: 5px;
   display: flex;
+  padding: 10px;
   flex-wrap: wrap;
+  cursor: pointer;
   align-items: center;
+  transition: all 0.7s ease;
+  border-radius: 0px;
+}
+.customizer__addnew__input-group:hover {
+  background-color: rgba(245, 245, 245, 0.5607843137);
+}
+.customizer__addnew__input-group input[type=radio], .customizer__addnew__input-group input[type=checkbox] {
+  transform: translate(3px, 3px);
 }
 .customizer__addnew__input-group label {
-  margin: unset !important;
+  font-size: 16px;
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+.customizer__addnew__input-desc {
+  margin: unset;
+  text-align: start;
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 .customizer.expanded {
   top: 0;
@@ -270,12 +310,14 @@
 .customizer.expanded .customizer__body::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
-/*
- * Custom necessery css scripts it required.
-*/
-#woocommerce-coupon-data ul.wc-tabs li.customized_tab a::before, #woocommerce-product-data ul.wc-tabs li.customized_tab a::before, .woocommerce ul.wc-tabs li.customized_tab a::before {
-  content: "\f540";
+.customizer .btn {
+  color: #FFFFFF;
+  background: #2c2b2b;
+}
+.customizer .btn:hover, .customizer .btn:focus, .customizer .btn:active {
+  border: none;
+  color: #FFFFFF;
+  background: #c9a670;
 }
 
 .customize__step {
@@ -283,7 +325,7 @@
   padding: unset;
   border-radius: 3px;
   margin-bottom: 1rem;
-  border: 1px solid #dedede;
+  border: 1px solid #c9a670;
 }
 .customize__step .form-group {
   display: flex;
@@ -308,9 +350,9 @@
   align-items: center;
   padding: 0.2rem 1rem;
   align-content: center;
-  background-color: #f8f9fa;
+  border-bottom: 1px solid #c9a670;
   justify-content: space-between;
-  border-bottom: 1px solid #dedede;
+  background-color: #eadbc6;
 }
 .customize__step__header[data-status=hidden] {
   border-bottom: none;
@@ -320,6 +362,7 @@
 }
 .customize__step__header__text {
   font-size: 18px;
+  color: #2c2b2b;
   text-transform: uppercase;
 }
 .customize__step__header__actions {
@@ -351,8 +394,8 @@
   margin-top: 7px;
   color: #767676;
   padding: 5px 10px;
-  border-radius: 7px;
-  border: 1px solid #ddd;
+  border-radius: 0px;
+  border: 1px solid #c9a670;
 }
 .customize__step__body > .form-group > button.imglibrary {
   max-width: 200px;
@@ -381,23 +424,21 @@
 .customize__step__body > .form-group .single-repeater-options {
   padding: 10px;
   margin: 20px 0 0;
-  border-radius: 7px;
-  border: 1px solid rgba(221, 221, 221, 0.8666666667);
+  border-radius: 0px;
+  border: 1px solid #c9a670;
 }
 .customize__step__body > .form-group .single-repeater-options + .do_repeater_field {
   width: 150px;
-  color: #333;
   font-size: 16px;
-  border-radius: 7px;
-  border: 1px solid #ddd;
+  border-radius: 0px;
 }
 .customize__step__body > .form-group .single-repeater-option {
   padding: unset;
   margin: 10px auto;
   padding-top: 10px;
   position: relative;
-  border-radius: 7px;
-  /* border: 1px solid #dedede; */
+  border-radius: 0px;
+  /* border: $primary_border; */
 }
 .customize__step__body > .form-group .single-repeater-option:not(:last-child) {
   margin-top: 0.5rem;
@@ -414,7 +455,7 @@
   width: 90%;
   margin: auto;
   border-radius: unset;
-  border: 1px solid #ddd;
+  border: 1px solid #c9a670;
   justify-content: space-around;
   box-shadow: 1px 1px 5px #ddd;
 }
@@ -429,7 +470,7 @@
 .customize__step__body > .form-group .single-repeater-option .awesomplete ul[role=listbox] {
   padding: unset;
   padding-left: 10px;
-  border: 1px solid #eee;
+  border: 1px solid #c9a670;
 }
 .customize__step__body > .form-group .single-repeater-option .awesomplete ul[role=listbox] li[role=option] {
   border: none;
@@ -479,15 +520,18 @@
 .customize__step__body > .form-group .single-repeater-option.single-repeater-group .single-repeater-body {
   padding: 10px;
 }
+.customize__step__body > .form-group .single-repeater-empty {
+  display: none;
+}
 .customize__step__body > .form-group .single-repeater-head {
   display: flex;
   cursor: pointer;
   padding: 5px 10px;
   align-items: center;
-  background: rgba(238, 238, 238, 0.3294117647);
-  justify-content: space-between;
-  border: 1px solid rgba(221, 221, 221, 0.8666666667);
   border-bottom: unset;
+  border: 1px solid #c9a670;
+  justify-content: space-between;
+  background: #eadbc6;
 }
 .customize__step__body > .form-group .single-repeater-headacts {
   gap: 10px;
@@ -497,7 +541,7 @@
 .customize__step__body > .form-group .single-repeater-body {
   border-top: unset;
   padding: 20px 10px 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #c9a670;
 }
 
 .imgpreview {
@@ -541,7 +585,7 @@
   z-index: 99999;
   position: fixed;
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid #c9a670;
   box-shadow: 1px 1px 5px #ddd;
 }
 .contextmenu__list {
@@ -580,7 +624,7 @@
 }
 .gallery-card {
   padding: 5px;
-  border: 1px solid rgba(221, 221, 221, 0.8666666667);
+  border: 1px solid #c9a670;
 }
 .gallery-card-img {
   margin: 0;
@@ -590,6 +634,21 @@
   display: flex;
   padding: 0 10px;
   margin: 20px 0 0 0;
+}
+
+/*
+ * Custom necessery css scripts it required.
+*/
+#woocommerce-coupon-data ul.wc-tabs li.customized_tab a::before, #woocommerce-product-data ul.wc-tabs li.customized_tab a::before, .woocommerce ul.wc-tabs li.customized_tab a::before {
+  content: "\f540";
+}
+
+.swal2-container.swal2-center.swal2-backdrop-show {
+  z-index: 99999;
+}
+
+body div[data-tippy-root][id] {
+  z-index: 99999 !important;
 }
 
 .btn.is_loading {
@@ -655,16 +714,26 @@
 }
 .form-controls-config input:not([type=radio]):not([type=checkbox]):not([type=button]) {
   padding: 5px 10px;
-  border-radius: 7px;
-  border: 1px solid #ddd;
+  border-radius: 0px;
+  border: 1px solid #c9a670;
 }
 
-.swal2-container.swal2-center.swal2-backdrop-show {
-  z-index: 99999;
+.swal2-actions button.swal2-styled {
+  color: #FFFFFF;
+  background: #2c2b2b;
+}
+.swal2-actions button.swal2-styled:hover, .swal2-actions button.swal2-styled:focus, .swal2-actions button.swal2-styled:active {
+  border: none;
+  color: #FFFFFF;
+  background: #c9a670;
 }
 
-body div[data-tippy-root][id] {
-  z-index: 99999 !important;
+.swal2-title {
+  font-size: 25px;
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
 }
 
 /*# sourceMappingURL=admin.css.map*/

@@ -9,9 +9,16 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
-
 @mixin font-family($font: $font__main) {
 	font-family: $font__main;
+}
+@mixin primary-font($weight: 400) {
+	// @include primary-font;
+	font-family: "Open Sans", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: $weight;
+	font-style: normal;
+	// font-variation-settings: 100;
 }
 
 /**

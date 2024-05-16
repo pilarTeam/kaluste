@@ -2,6 +2,9 @@
  * Base Scripts
  */
 .customizer {
+  * {
+    @include primary-font(700);
+  }
   &__container {
     width: 100%;
     height: 100%;
@@ -16,7 +19,7 @@
     position: relative;
     border-radius: 10px;
     flex-direction: column;
-    // border: 1px solid #dddd;
+    // border: $primary_border;
     justify-content: space-between;
   }
   &__footer,
@@ -49,10 +52,10 @@
           margin: auto;
           cursor: grab;
           font-size: 16px;
-          border-radius: 7px;
+          border-radius: $primary_border_radius;
           background: #fff;
           width: 100% !important;
-          border: 1px solid #dddd;
+          border: $primary_border;
           background-color: transparent !important;
 
           // Disabling text selection
@@ -64,7 +67,7 @@
         }
       }
       &.active {
-        border-radius: 7px;
+        border-radius: $primary_border_radius;
         box-shadow: 0 0 7px rgb(216 216 216 / 77%);
         .form-control {
           border: 1px solid #333;
@@ -86,6 +89,10 @@
           display: flex;
           align-items: center;
         }
+        .btn-color {
+          fill: $white_color;
+        }
+        // &:hover {}
       }
     }
   }
@@ -125,7 +132,7 @@
     &__tab {
       width: 100%;
       // display: none;
-      border: 1px solid #dddd;
+      border: $primary_border;
       box-shadow: 0 0 20px #dddddd52;
       &.active {
         display: block;
@@ -208,7 +215,7 @@
     }
     &__body {
       padding: 10px;
-      // border: 1px solid #ddd;
+      // border: $primary_border;
     }
     // &__fields {}
   }
@@ -221,42 +228,61 @@
       padding: 10px 20px;
       border-radius: 10px;
       background: transparent;
-      border: 1px solid #dddd;
+      border: $primary_border;
       text-transform: uppercase;
     }
   }
   &__addnew {
+    &__field {
+      margin: auto;
+      max-width: 300px;
+      padding: 10px 20px;
+      border: $primary_border;
+      box-shadow: 0 0 15px #dddddd87;
+      border-radius: $primary_border_radius;
+    }
     &__form {
-      gap: 10px;
+      gap: 20px;
       display: flex;
       margin: 10px 0;
       margin-bottom: 30px;
       flex-direction: column;
-      font-family: sans-serif;
+      @include primary-font;
     }
     &__type {
       &__select {
         // 
       }
     }
-    &__form-wrap {
-      // 
-    }
-    &__field {}
-    &__form {}
+    // &__form-wrap {}
+    // &__field {}
     &__input-group {
-      gap: 10px;
+      gap: 5px;
       display: flex;
+      padding: 10px;
       flex-wrap: wrap;
+      cursor: pointer;
       align-items: center;
-      // border-radius: 10px;
-      // transition: all .7s ease;
-      // border: 1px solid transparent;
-      // &:hover {
-      //   border-color: #dddd;
-      // }
+      transition: all .7s ease;
+      border-radius: $primary_border_radius;
+      &:hover {
+        background-color: #f5f5f58f;
+      }
+      input[type="radio"], input[type="checkbox"] {
+        transform: translate(3px, 3px);
+      }
       label {
-        margin: unset !important;
+        font-size: 16px;
+        @include primary-font(700);
+      }
+    }
+    
+    &__input {
+      &-desc {
+        margin: unset;
+        text-align: start;
+        font-size: .75rem;
+        line-height: 1rem;
       }
     }
   }
@@ -294,17 +320,16 @@
       }
     }
   }
+  .btn {
+    color: $white_color;
+    background: $primary_button_bg;
+    &:hover, &:focus, &:active {
+      border: none;
+      color: $white_color;
+      background: $primary_button_hover_bg;
+    }
+  }
 }
-
-/*
- * Custom necessery css scripts it required.
-*/
-#woocommerce-coupon-data ul.wc-tabs li.customized_tab a::before, #woocommerce-product-data ul.wc-tabs li.customized_tab a::before, .woocommerce ul.wc-tabs li.customized_tab a::before {
-  content: "\f540";
-}
-
-
-
 
 
 
@@ -313,7 +338,7 @@
   padding: unset;
   border-radius: 3px;
   margin-bottom: 1rem;
-  border: 1px solid #dedede;
+  border: $primary_border;
   // & > 
   .form-group {
     display: flex;
@@ -340,9 +365,9 @@
     align-items: center;
     padding: 0.2rem 1rem;
     align-content: center;
-    background-color: #f8f9fa;
+    border-bottom: $primary_border;
     justify-content: space-between;
-    border-bottom: 1px solid #dedede;
+    background-color: $secondary_color_light;
     &[data-status="hidden"] {
       border-bottom: none;
     }
@@ -352,6 +377,7 @@
     &__text {
       // width: 150px;
       font-size: 18px;
+      color: $primary_text_dark;
       text-transform: uppercase;
     }
     &__actions {
@@ -384,8 +410,8 @@
         margin-top: 7px;
         color: #767676;
         padding: 5px 10px;
-        border-radius: 7px;
-        border: 1px solid #ddd;
+        border-radius: $primary_border_radius;
+        border: $primary_border;
       }
       > button.imglibrary {
         max-width: 200px;
@@ -416,14 +442,12 @@
         &-options {
           padding: 10px;
           margin: 20px 0 0;
-          border-radius: 7px;
-          border: 1px solid #dddd;
+          border-radius: $primary_border_radius;
+          border: $primary_border;
           + .do_repeater_field {
             width: 150px;
-            color: #333;
             font-size: 16px;
-            border-radius: 7px;
-            border: 1px solid #ddd;
+            border-radius: $primary_border_radius;
           }
         }
         &-option {
@@ -431,8 +455,8 @@
           margin: 10px auto;
           padding-top: 10px;
           position: relative;
-          border-radius: 7px;
-          /* border: 1px solid #dedede; */
+          border-radius: $primary_border_radius;
+          /* border: $primary_border; */
           &:not(:last-child) {
             margin-top: 0.5rem;
           }
@@ -459,7 +483,7 @@
               width: 90%;
               margin: auto;
               border-radius: unset;
-              border: 1px solid #ddd;
+              border: $primary_border;
               justify-content: space-around;
               box-shadow: 1px 1px 5px #ddd;
             }
@@ -474,7 +498,7 @@
             ul[role="listbox"] {
               padding: unset;
               padding-left: 10px;
-              border: 1px solid #eee;
+              border: $primary_border;
               li[role="option"] {
                 border: none;
                 display: flex;
@@ -528,15 +552,18 @@
             }
           }
         }
+        &-empty {
+          display: none;
+        }
         &-head {
           display: flex;
           cursor: pointer;
           padding: 5px 10px;
           align-items: center;
-          background: #eeeeee54;
-          justify-content: space-between;
-          border: 1px solid #dddd;
           border-bottom: unset;
+          border: $primary_border;
+          justify-content: space-between;
+          background: $secondary_color_light;
         }
         &-headacts {
           gap: 10px;
@@ -546,7 +573,7 @@
         &-body {
           border-top: unset;
           padding: 20px 10px 10px;
-          border: 1px solid #ddd;
+          border: $primary_border;
         }
       }
     }
@@ -595,7 +622,7 @@
   z-index: 99999;
   position: fixed;
   background: white;
-  border: 1px solid #ddd;
+  border: $primary_border;
   box-shadow: 1px 1px 5px #ddd;
   &__list {
     list-style: none;
@@ -634,7 +661,7 @@
   }
   &-card {
     padding: 5px;
-    border: 1px solid #dddd;
+    border: $primary_border;
     &-img {
       margin: 0;
       display: block;
@@ -647,7 +674,14 @@
   }
 }
 
-
+/*
+ * Custom necessery css scripts it required.
+*/
+#woocommerce-coupon-data ul.wc-tabs li.customized_tab a::before, #woocommerce-product-data ul.wc-tabs li.customized_tab a::before, .woocommerce ul.wc-tabs li.customized_tab a::before {
+  content: "\f540";
+}
+.swal2-container.swal2-center.swal2-backdrop-show {z-index: 99999;}
+body div[data-tippy-root][id] {z-index: 99999 !important;}
 .btn.is_loading {
   gap: 5px;
   display: flex;
@@ -709,13 +743,22 @@
   }
   input:not([type=radio]):not([type=checkbox]):not([type=button]) {
     padding: 5px 10px;
-    border-radius: 7px;
-    border: 1px solid #ddd;
+    border-radius: $primary_border_radius;
+    border: $primary_border;
   }
 }
-.swal2-container.swal2-center.swal2-backdrop-show {
-  z-index: 99999;
+.swal2-actions {
+  button.swal2-styled {
+    color: $white_color;
+    background: $primary_button_bg;
+    &:hover, &:focus, &:active {
+      border: none;
+      color: $white_color;
+      background: $primary_button_hover_bg;
+    }
+  }
 }
-body div[data-tippy-root][id] {
-  z-index: 99999 !important;
+.swal2-title {
+  font-size: 25px;
+  @include primary-font(700);
 }

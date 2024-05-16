@@ -1,7 +1,17 @@
 // Site variables.
 $white_color: #FFFFFF;
-$primary_color: #44b678;
-$secondary_color: #1D1D1D; //  #445de5;
+$primary_color: #2c2b2b;
+$secondary_color: #c9a670;
+$secondary_color_dark: #c9a670;
+$secondary_color_light: #eadbc6;
+$primary_button_bg: #2c2b2b;
+$primary_button_hover_bg: $secondary_color;
+
+$primary_text_dark: #2c2b2b;
+$primary_text_light: $white_color;
+
+$primary_border: 1px solid $secondary_color_dark;
+$primary_border_radius: 0px;
 
 // Default Border Radius
 $border-radius: 3px;

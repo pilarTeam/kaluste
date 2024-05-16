@@ -120,14 +120,17 @@ import Post from "../modules/post";
 						break;
 				}
 			});
-			document.querySelectorAll('#publish').forEach(publish => {
-				publish.addEventListener('click', (event) => {
-					// publish.dataset?.disabled == true || 
+			document.querySelectorAll('form#post').forEach(postForm => {
+				postForm.addEventListener('submit', (event) => {
+					// postForm.dataset?.disabled == true || 
 					if (thisClass.customier?.pendingSubmission) {
 						event.preventDefault();
-						thisClass.do_update_submission()
+						thisClass.do_update_submission(false, true)
 						.then(response => {
-							publish.click();
+							thisClass.customier.pendingSubmission = false;
+							document.querySelectorAll('input[name="__customizer_configurations"]').forEach(input => input.value = JSON.stringify(response));
+							postForm.submit();
+							// document.querySelectorAll('#publish').forEach(publish => publish.click());
 						})
 						.catch((err) => {
 							console.error("Error:", err);
@@ -322,6 +325,7 @@ import Post from "../modules/post";
 			button.addEventListener('click', (event) => {
 				event.preventDefault();
 				Swal.fire({
+					width: 400,
 					focusConfirm: false,
 					showCloseButton: true,
 					title: "Add New Block",
@@ -399,17 +403,35 @@ import Post from "../modules/post";
 			if (template.querySelector('.customizer__addnew__form-wrap')) {wrap = template.querySelector('.customizer__addnew__form-wrap');}
 			node = document.createElement('form');node.classList.add('customizer__addnew__form');
 			node.action = '#';node.method = 'post';node.name = 'newElementTypeSelect';
-			// node.style.display = 'none';
-			// h2 = document.createElement('h4');h2.classList.add('h4');
-			// h2.innerHTML = thisClass.i18n?.selectatype??'Select a type';
-			// node.appendChild(h2);
 			fields.forEach((field, i) => {
 				div = document.createElement('div');div.classList.add('customizer__addnew__input-group');
 				input = document.createElement('input');input.name ='fieldtype';
 				input.type = 'radio';input.value = field;input.id = 'eltype-field-'+i;
-				label = document.createElement('label');label.classList.add('option');
+				var label = document.createElement('label');label.classList.add('option');
 				label.setAttribute('for', input.id);label.innerHTML = field.toUpperCase();
-				div.appendChild(input);div.appendChild(label);node.appendChild(div);
+				div.appendChild(input);div.appendChild(label);
+				
+				var desc = document.createElement('p');desc.classList.add('customizer__addnew__input-desc');
+				switch (field) {
+					case 'text':
+						desc.innerHTML = thisClass.i18n?.adnwblkText??'Select text field for text inputs. User will write any text/comments here.';
+						break;
+					case 'radio':
+						desc.innerHTML = thisClass.i18n?.adnwblkRadio??'Radio groups are for putting options inline where user could choose an option.';
+						break;
+					case 'image':
+						desc.innerHTML = thisClass.i18n?.adnwblkImage??'Image blocks are for putting images choosen ability for metarial selection.';
+						break;
+					default:
+						desc.innerHTML = '';
+						break;
+				}
+				desc.addEventListener('click', (event) => {
+					event.preventDefault();label.click();
+				});
+				if (desc.innerHTML.trim() !== '') {div.appendChild(desc);}
+				// 
+				node.appendChild(div);
 			});
 			wrap.appendChild(node);form.appendChild(wrap);
 			
@@ -431,85 +453,7 @@ import Post from "../modules/post";
 			
 			// template.innerHTML='';
 			template.appendChild(form);
-			if (false) {
-				setTimeout(() => {
-					button = document.querySelector('.procced_types');
-					if (button) {
-						button.addEventListener('click', (event) => {
-							jQuery('.customizer__addnew__form, .procced_types').slideUp();
-							jQuery('.add-new-types').slideDown();
-							data = thisClass.transformObjectKeys(Object.fromEntries(new FormData(document.querySelector('form[name="'+node.name+'"]'))));
-							// thisClass.toastify({text: "Procced clicked",className: "info",style: {background: "linear-gradient(to right, #00b09b, #96c93d)"}}).showToast();
-							field = thisClass.do_field(thisClass.doto_field(data?.fieldtype??'text'), {});
-
-							formGroup = document.querySelector('.customizer__state__fields');
-							if (formGroup) {formGroup.appendChild(field);}
-
-							setTimeout(() => {thisClass.init_intervalevent();},300);
-						});
-					}
-					button = document.querySelector('.add-new-types');
-					if (button) {
-						button.addEventListener('click', (event) => {
-							jQuery('.customizer__addnew__form, .procced_types').slideDown();
-							jQuery('.add-new-types').slideUp();
-							document.querySelectorAll('.customize__step__body:not([style*="display: none"])').forEach((el) => {jQuery(el).slideUp();});
-						});
-					}
-					document.querySelectorAll('#tab__content_standing > .customizer__addnew__form-wrap, #tab__content_sitting > .customizer__addnew__form-wrap').forEach((button) => {
-						// thisClass.sortable = 
-						var sort = new thisClass.Sortable(button, {
-							animation: 150,
-							dragoverBubble: false,
-							handle: '.customize__step__header',
-							easing: "cubic-bezier(1, 0, 0, 1)"
-						});
-					});
-					button = document.querySelector('.save-this-popup');
-					if (button) {
-						button.addEventListener('click', (event) => {
-							event.preventDefault();
-							button.setAttribute('disabled', true);
-							var popsData = {};
-							['standing', 'sitting'].forEach((id) => {
-								// form = document.querySelector('[name="add-new-element-type-select"]');
-								form = document.querySelector('#tab__content_' + id);
-								if (!thisClass.do_order(form)) {return;}data = [];
-								form.querySelectorAll('.customizer__addnew__form-wrap .customize__step').forEach((form) => {
-									data.push(
-										thisClass.transformObjectKeys(Object.fromEntries(new FormData(form)))
-									);
-								});
-								data = data.map((row) => {
-									row.fieldID = parseInt(row.fieldID);
-									if ((row?.options??false)) {
-										row.options = Object.values(row.options);
-										row.options = row.options.map((opt) => {
-											opt.next = (opt.next!='')?parseInt(opt.next):false;
-											return opt;
-										});
-									}
-									return row;
-								});
-								popsData[id] = data;
-							});
-							// console.log(popsData);return;
-		
-							var formdata = new FormData();
-							formdata.append('action', 'futurewordpress/project/ajax/save/product');
-							formdata.append('product_id', thisClass.config?.product_id??'');
-							formdata.append('dataset', JSON.stringify(popsData));
-							formdata.append('_nonce', thisClass.ajaxNonce);
-							thisClass.sendToServer(formdata);
-							setTimeout(() => {button.removeAttribute('disabled');}, 20000);
-						});
-					}
-					// Close all card after generating
-					jQuery('.customize__step .customize__step__body').slideUp();
-		
-					thisClass.context_menu();
-				}, 300);
-			}
+			// 
 			return template;
 		}
 		do_field(field, data) {
@@ -532,7 +476,7 @@ import Post from "../modules/post";
 				var actions = document.createElement('div');actions.classList.add('customize__step__header__actions');
 				var toggle = document.createElement('span');toggle.classList.add('dashicons-before', 'dashicons-arrow-up');
 				tippy(toggle, {content: 'Toggle this block'});
-				toggle.addEventListener('click', (event) => {
+				head.addEventListener('click', (event) => {
 					event.preventDefault();
                     switch (head.dataset?.status) {
 						case 'shown':
@@ -597,7 +541,7 @@ import Post from "../modules/post";
 				input.placeholder=thisClass.i18n?.customize__heading_text??'Headering';
 				label = document.createElement('label');label.classList.add('form-label');
 				label.setAttribute('for', 'thefield'+thisClass.lastfieldID);
-				label.innerHTML = thisClass.i18n?.customize__heading??'Header Text';
+				label.innerHTML = thisClass.i18n?.headertext??'Header Text';
 				input.addEventListener('input', (event) => {
 					var textEl = fieldset.parentElement.previousElementSibling.querySelector('.customize__step__header__text');
 					textEl.innerHTML = (event.target.value == '')?`${textEl.dataset.type.toUpperCase()}`:`${event.target.value} - ${textEl.dataset.type.toUpperCase()}`
@@ -613,7 +557,7 @@ import Post from "../modules/post";
 				input.placeholder=thisClass.i18n?.customize__subheading_text??'Sub-heading';
 				label = document.createElement('label');label.classList.add('form-label');
 				label.setAttribute('for', input.id);
-				label.innerHTML = thisClass.i18n?.customize__subheading??'Sub header text';
+				label.innerHTML = thisClass.i18n?.subheadertext??'Sub header text';
 				
 				fieldset.appendChild(label);fieldset.appendChild(input);body.appendChild(fieldset);
 			}
@@ -673,8 +617,10 @@ import Post from "../modules/post";
 					// label.setAttribute('for', input.id);label.innerHTML = thisClass.i18n?.placeholder_text??'Placeholder text';
 					// fieldset.appendChild(label);fieldset.appendChild(input);
 					var repeaters = document.createElement('div');repeaters.classList.add('single-repeater-options');
-					repeaters.innerHTML = '<h5 class="h5">Options</h5>';
-					
+					repeaters.innerHTML = `<h5 class="h5">${thisClass.i18n?.options??'Options'}</h5>`;
+					// 
+					if (!(data?.options) || data.options.length <= 0) {repeaters.classList.add('single-repeater-empty');}
+					// 
 					thisClass.customier.sortables.options.push(
 						new Sortable(repeaters, {
 							animation: 150,
@@ -696,6 +642,7 @@ import Post from "../modules/post";
 						thisClass.do_repeater(
 							input, {}, (input.dataset?.isGroup??false)
 						);
+						repeaters.classList.remove('single-repeater-empty');
 					});
 					fieldset.appendChild(input);
 					
@@ -715,14 +662,14 @@ import Post from "../modules/post";
 					break;
 			}
 			tab.appendChild(body);
-			thisClass.customier.sortables.blocks.push(
-				new Sortable(tab, {
-					animation: 150,
-					dragoverBubble: false,
-					easing: "cubic-bezier(1, 0, 0, 1)",
-					handle: '.customize__step__header',
-				})
-			);
+			// thisClass.customier.sortables.blocks.push(
+			// 	new Sortable(tab, {
+			// 		animation: 150,
+			// 		dragoverBubble: false,
+			// 		easing: "cubic-bezier(1, 0, 0, 1)",
+			// 		// handle: '.customize__step__header',
+			// 	})
+			// );
 			return tab;
 		}
 		doto_field(type) {
@@ -767,6 +714,7 @@ import Post from "../modules/post";
 			var wrap, config, group, input, hidden, marker, remover, order, prepend, append, text, image, preview;
 			if (!el.dataset.order) {el.dataset.order=0;}
 			order = parseInt(el.dataset.order);
+			var parentRepeater = el.parentElement.querySelector('.single-repeater-options');
 			wrap = document.createElement('div');wrap.classList.add('single-repeater-option', 'show-configs');
 
 			/**
@@ -784,7 +732,16 @@ import Post from "../modules/post";
 				remover = document.createElement('span');remover.classList.add('dashicons-before', 'dashicons-trash');tippy(remover, {content: 'Remove this Item'});
 				remover.addEventListener('click', (event) => {
 					event.preventDefault();
-					if (confirm('Are you sure you want to remove this item?')) {wrap.remove();}
+					if (confirm('Are you sure you want to remove this item?')) {
+						wrap.remove();
+						if (parentRepeater) {
+							if (parentRepeater.children.length >= 2) {
+								parentRepeater.classList.remove('single-repeater-empty');
+							} else {
+								parentRepeater.classList.add('single-repeater-empty');
+							}
+						}
+					}
 				});
 				var HActToggle = document.createElement('span');HActToggle.classList.add('dashicons-before', 'dashicons-arrow-up');
 				tippy(HActToggle, {content: 'Toggle this Item'});
@@ -996,7 +953,7 @@ import Post from "../modules/post";
 				wrap.appendChild(foot);
 			}
 			
-			el.parentElement.querySelector('.single-repeater-options').appendChild(wrap);
+			parentRepeater.appendChild(wrap);
 			setTimeout(() => {thisClass.init_intervalevent(window.thisClass);}, 300);
 		}
 		do_group_repeater(el, group) {
@@ -1358,14 +1315,13 @@ import Post from "../modules/post";
 				input.dataset.changeObserver = true;
 				input.addEventListener('change', (event) => {
 					thisClass.customier.pendingSubmission = true;
-					// document.querySelectorAll('#publish').forEach(publish => publish.dataset.disabled = true);
 				});
 			});
 		}
 		insertAfter(referenceNode, newNode) {
 			referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 		}
-		do_update_submission(imports = false) {
+		do_update_submission(imports = false, inline = false) {
 			const thisClass = this;
 			return new Promise((resolve, reject) => {
 				thisClass.customier.actionBtns.update.classList.add('is_loading');
@@ -1393,6 +1349,12 @@ import Post from "../modules/post";
 						return tab;
 					});
 				}
+				if (inline === true) {
+					thisClass.customier.actionBtns.update.classList.remove('is_loading');
+					resolve(thisClass.customier.tabset);
+					return thisClass.customier.tabset;
+				}
+				console.log('hi there');
 				// 
 				var data = new FormData();
 				data.append('_nonce', thisClass.ajaxNonce);
@@ -1403,7 +1365,6 @@ import Post from "../modules/post";
 				.then(response => {
 					thisClass.customier.actionBtns.update.classList.remove('is_loading');
 					thisClass.customier.pendingSubmission = false;
-					// document.querySelectorAll('#publish').forEach(publish => publish.dataset.disabled = false);
 					resolve(response);
 				})
 				.catch((error) => {

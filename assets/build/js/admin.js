@@ -13834,14 +13834,19 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               break;
           }
         });
-        document.querySelectorAll('#publish').forEach(function (publish) {
-          publish.addEventListener('click', function (event) {
+        document.querySelectorAll('form#post').forEach(function (postForm) {
+          postForm.addEventListener('submit', function (event) {
             var _thisClass$customier;
-            // publish.dataset?.disabled == true || 
+            // postForm.dataset?.disabled == true || 
             if ((_thisClass$customier = thisClass.customier) !== null && _thisClass$customier !== void 0 && _thisClass$customier.pendingSubmission) {
               event.preventDefault();
-              thisClass.do_update_submission().then(function (response) {
-                publish.click();
+              thisClass.do_update_submission(false, true).then(function (response) {
+                thisClass.customier.pendingSubmission = false;
+                document.querySelectorAll('input[name="__customizer_configurations"]').forEach(function (input) {
+                  return input.value = JSON.stringify(response);
+                });
+                postForm.submit();
+                // document.querySelectorAll('#publish').forEach(publish => publish.click());
               }).catch(function (err) {
                 console.error("Error:", err);
                 thisClass.toast.fire({
@@ -14131,6 +14136,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           var _thisClass$i18n$proce, _thisClass$i18n5;
           event.preventDefault();
           sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
+            width: 400,
             focusConfirm: false,
             showCloseButton: true,
             title: "Add New Block",
@@ -14222,7 +14228,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     }, {
       key: "do_add_new_element_popup",
       value: function do_add_new_element_popup() {
-        var _thisClass$i18n$addne, _thisClass$i18n6, _thisClass$i18n$proce2, _thisClass$i18n7;
+        var _thisClass$i18n$addne, _thisClass$i18n9, _thisClass$i18n$proce2, _thisClass$i18n10;
         var thisClass = this;
         var template, fields, data, form, field, wrap, node, div, button, label, input, h2, formGroup, json;
         json = thisClass.get_fields();
@@ -14248,11 +14254,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         node.action = '#';
         node.method = 'post';
         node.name = 'newElementTypeSelect';
-        // node.style.display = 'none';
-        // h2 = document.createElement('h4');h2.classList.add('h4');
-        // h2.innerHTML = thisClass.i18n?.selectatype??'Select a type';
-        // node.appendChild(h2);
         fields.forEach(function (field, i) {
+          var _thisClass$i18n$adnwb, _thisClass$i18n6, _thisClass$i18n$adnwb2, _thisClass$i18n7, _thisClass$i18n$adnwb3, _thisClass$i18n8;
           div = document.createElement('div');
           div.classList.add('customizer__addnew__input-group');
           input = document.createElement('input');
@@ -14260,12 +14263,36 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           input.type = 'radio';
           input.value = field;
           input.id = 'eltype-field-' + i;
-          label = document.createElement('label');
+          var label = document.createElement('label');
           label.classList.add('option');
           label.setAttribute('for', input.id);
           label.innerHTML = field.toUpperCase();
           div.appendChild(input);
           div.appendChild(label);
+          var desc = document.createElement('p');
+          desc.classList.add('customizer__addnew__input-desc');
+          switch (field) {
+            case 'text':
+              desc.innerHTML = (_thisClass$i18n$adnwb = (_thisClass$i18n6 = thisClass.i18n) === null || _thisClass$i18n6 === void 0 ? void 0 : _thisClass$i18n6.adnwblkText) !== null && _thisClass$i18n$adnwb !== void 0 ? _thisClass$i18n$adnwb : 'Select text field for text inputs. User will write any text/comments here.';
+              break;
+            case 'radio':
+              desc.innerHTML = (_thisClass$i18n$adnwb2 = (_thisClass$i18n7 = thisClass.i18n) === null || _thisClass$i18n7 === void 0 ? void 0 : _thisClass$i18n7.adnwblkRadio) !== null && _thisClass$i18n$adnwb2 !== void 0 ? _thisClass$i18n$adnwb2 : 'Radio groups are for putting options inline where user could choose an option.';
+              break;
+            case 'image':
+              desc.innerHTML = (_thisClass$i18n$adnwb3 = (_thisClass$i18n8 = thisClass.i18n) === null || _thisClass$i18n8 === void 0 ? void 0 : _thisClass$i18n8.adnwblkImage) !== null && _thisClass$i18n$adnwb3 !== void 0 ? _thisClass$i18n$adnwb3 : 'Image blocks are for putting images choosen ability for metarial selection.';
+              break;
+            default:
+              desc.innerHTML = '';
+              break;
+          }
+          desc.addEventListener('click', function (event) {
+            event.preventDefault();
+            label.click();
+          });
+          if (desc.innerHTML.trim() !== '') {
+            div.appendChild(desc);
+          }
+          // 
           node.appendChild(div);
         });
         wrap.appendChild(node);
@@ -14276,13 +14303,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         button = document.createElement('button');
         button.type = 'button';
         button.classList.add('btn', 'button', 'add-new-types');
-        button.innerHTML = (_thisClass$i18n$addne = (_thisClass$i18n6 = thisClass.i18n) === null || _thisClass$i18n6 === void 0 ? void 0 : _thisClass$i18n6.addnewfield) !== null && _thisClass$i18n$addne !== void 0 ? _thisClass$i18n$addne : 'Add new field';
+        button.innerHTML = (_thisClass$i18n$addne = (_thisClass$i18n9 = thisClass.i18n) === null || _thisClass$i18n9 === void 0 ? void 0 : _thisClass$i18n9.addnewfield) !== null && _thisClass$i18n$addne !== void 0 ? _thisClass$i18n$addne : 'Add new field';
         button.style.display = 'inline-block';
         block.appendChild(button);
         button = document.createElement('button');
         button.type = 'button';
         button.classList.add('btn', 'button', 'procced_types');
-        button.innerHTML = (_thisClass$i18n$proce2 = (_thisClass$i18n7 = thisClass.i18n) === null || _thisClass$i18n7 === void 0 ? void 0 : _thisClass$i18n7.proceed) !== null && _thisClass$i18n$proce2 !== void 0 ? _thisClass$i18n$proce2 : 'Proceed';
+        button.innerHTML = (_thisClass$i18n$proce2 = (_thisClass$i18n10 = thisClass.i18n) === null || _thisClass$i18n10 === void 0 ? void 0 : _thisClass$i18n10.proceed) !== null && _thisClass$i18n$proce2 !== void 0 ? _thisClass$i18n$proce2 : 'Proceed';
         button.style.display = 'none';
         block.appendChild(button);
         // 
@@ -14290,13 +14317,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
         // template.innerHTML='';
         template.appendChild(form);
-        if (false) {}
+        // 
         return template;
       }
     }, {
       key: "do_field",
       value: function do_field(field, data) {
-        var _thisClass$currentFie, _data$placeholder, _thisClass$i18n$place, _thisClass$i18n17, _thisClass$i18n$place2, _thisClass$i18n18, _thisClass$i18n$add_n2, _thisClass$i18n19, _data$options;
+        var _thisClass$currentFie, _data$placeholder, _thisClass$i18n$place, _thisClass$i18n20, _thisClass$i18n$place2, _thisClass$i18n21, _thisClass$i18n$optio, _thisClass$i18n22, _thisClass$i18n$add_n2, _thisClass$i18n23, _data$options;
         var thisClass = this;
         thisClass.currentFieldID = (_thisClass$currentFie = thisClass.currentFieldID) !== null && _thisClass$currentFie !== void 0 ? _thisClass$currentFie : 0;
         var header, fields, form, fieldset, input, label, level, hidden, span, option, head, others, body, div, remove, img, icon, preview, cross, node;
@@ -14334,7 +14361,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           Object(tippy_js__WEBPACK_IMPORTED_MODULE_1__["default"])(toggle, {
             content: 'Toggle this block'
           });
-          toggle.addEventListener('click', function (event) {
+          head.addEventListener('click', function (event) {
             var _head$dataset;
             event.preventDefault();
             switch ((_head$dataset = head.dataset) === null || _head$dataset === void 0 ? void 0 : _head$dataset.status) {
@@ -14364,9 +14391,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           input.name = 'type';
           input.setAttribute('value', (_data$type4 = data === null || data === void 0 ? void 0 : data.type) !== null && _data$type4 !== void 0 ? _data$type4 : field.type);
           remove.addEventListener('click', function (event) {
-            var _thisClass$i18n$areus, _thisClass$i18n8;
+            var _thisClass$i18n$areus, _thisClass$i18n11;
             event.preventDefault();
-            if (confirm((_thisClass$i18n$areus = (_thisClass$i18n8 = thisClass.i18n) === null || _thisClass$i18n8 === void 0 ? void 0 : _thisClass$i18n8.areusure) !== null && _thisClass$i18n$areus !== void 0 ? _thisClass$i18n$areus : 'Are you sure?')) {
+            if (confirm((_thisClass$i18n$areus = (_thisClass$i18n11 = thisClass.i18n) === null || _thisClass$i18n11 === void 0 ? void 0 : _thisClass$i18n11.areusure) !== null && _thisClass$i18n$areus !== void 0 ? _thisClass$i18n$areus : 'Are you sure?')) {
               tab.remove();
             }
           });
@@ -14389,9 +14416,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           head.appendChild(actions);
           tab.appendChild(head);
         }
-        if (false) { var _data$steptitle, _thisClass$i18n$custo, _thisClass$i18n9, _thisClass$i18n$custo2, _thisClass$i18n10; }
+        if (false) { var _data$steptitle, _thisClass$i18n$custo, _thisClass$i18n12, _thisClass$i18n$custo2, _thisClass$i18n13; }
         if (field !== null && field !== void 0 && field.heading) {
-          var _data$heading2, _thisClass$i18n$custo3, _thisClass$i18n11, _thisClass$i18n$custo4, _thisClass$i18n12;
+          var _data$heading2, _thisClass$i18n$custo3, _thisClass$i18n14, _thisClass$i18n$heade, _thisClass$i18n15;
           thisClass.lastfieldID++;
           fieldset = document.createElement('div');
           fieldset.classList.add('form-group');
@@ -14401,11 +14428,11 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           input.classList.add('form-control');
           input.name = 'heading';
           input.setAttribute('value', (_data$heading2 = data === null || data === void 0 ? void 0 : data.heading) !== null && _data$heading2 !== void 0 ? _data$heading2 : '');
-          input.placeholder = (_thisClass$i18n$custo3 = (_thisClass$i18n11 = thisClass.i18n) === null || _thisClass$i18n11 === void 0 ? void 0 : _thisClass$i18n11.customize__heading_text) !== null && _thisClass$i18n$custo3 !== void 0 ? _thisClass$i18n$custo3 : 'Headering';
+          input.placeholder = (_thisClass$i18n$custo3 = (_thisClass$i18n14 = thisClass.i18n) === null || _thisClass$i18n14 === void 0 ? void 0 : _thisClass$i18n14.customize__heading_text) !== null && _thisClass$i18n$custo3 !== void 0 ? _thisClass$i18n$custo3 : 'Headering';
           label = document.createElement('label');
           label.classList.add('form-label');
           label.setAttribute('for', 'thefield' + thisClass.lastfieldID);
-          label.innerHTML = (_thisClass$i18n$custo4 = (_thisClass$i18n12 = thisClass.i18n) === null || _thisClass$i18n12 === void 0 ? void 0 : _thisClass$i18n12.customize__heading) !== null && _thisClass$i18n$custo4 !== void 0 ? _thisClass$i18n$custo4 : 'Header Text';
+          label.innerHTML = (_thisClass$i18n$heade = (_thisClass$i18n15 = thisClass.i18n) === null || _thisClass$i18n15 === void 0 ? void 0 : _thisClass$i18n15.headertext) !== null && _thisClass$i18n$heade !== void 0 ? _thisClass$i18n$heade : 'Header Text';
           input.addEventListener('input', function (event) {
             var textEl = fieldset.parentElement.previousElementSibling.querySelector('.customize__step__header__text');
             textEl.innerHTML = event.target.value == '' ? "".concat(textEl.dataset.type.toUpperCase()) : "".concat(event.target.value, " - ").concat(textEl.dataset.type.toUpperCase());
@@ -14415,7 +14442,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           body.appendChild(fieldset);
         }
         if (field !== null && field !== void 0 && field.subtitle) {
-          var _data$subtitle, _thisClass$i18n$custo5, _thisClass$i18n13, _thisClass$i18n$custo6, _thisClass$i18n14;
+          var _data$subtitle, _thisClass$i18n$custo4, _thisClass$i18n16, _thisClass$i18n$subhe, _thisClass$i18n17;
           thisClass.lastfieldID++;
           fieldset = document.createElement('div');
           fieldset.classList.add('form-group');
@@ -14425,18 +14452,18 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           input.type = 'text';
           input.id = 'thefield' + thisClass.lastfieldID;
           input.setAttribute('value', (_data$subtitle = data === null || data === void 0 ? void 0 : data.subtitle) !== null && _data$subtitle !== void 0 ? _data$subtitle : '');
-          input.placeholder = (_thisClass$i18n$custo5 = (_thisClass$i18n13 = thisClass.i18n) === null || _thisClass$i18n13 === void 0 ? void 0 : _thisClass$i18n13.customize__subheading_text) !== null && _thisClass$i18n$custo5 !== void 0 ? _thisClass$i18n$custo5 : 'Sub-heading';
+          input.placeholder = (_thisClass$i18n$custo4 = (_thisClass$i18n16 = thisClass.i18n) === null || _thisClass$i18n16 === void 0 ? void 0 : _thisClass$i18n16.customize__subheading_text) !== null && _thisClass$i18n$custo4 !== void 0 ? _thisClass$i18n$custo4 : 'Sub-heading';
           label = document.createElement('label');
           label.classList.add('form-label');
           label.setAttribute('for', input.id);
-          label.innerHTML = (_thisClass$i18n$custo6 = (_thisClass$i18n14 = thisClass.i18n) === null || _thisClass$i18n14 === void 0 ? void 0 : _thisClass$i18n14.customize__subheading) !== null && _thisClass$i18n$custo6 !== void 0 ? _thisClass$i18n$custo6 : 'Sub header text';
+          label.innerHTML = (_thisClass$i18n$subhe = (_thisClass$i18n17 = thisClass.i18n) === null || _thisClass$i18n17 === void 0 ? void 0 : _thisClass$i18n17.subheadertext) !== null && _thisClass$i18n$subhe !== void 0 ? _thisClass$i18n$subhe : 'Sub header text';
           fieldset.appendChild(label);
           fieldset.appendChild(input);
           body.appendChild(fieldset);
         }
         thisClass.lastfieldID++; // field.required
         if (true) {
-          var _data$required, _thisClass$i18n$custo7, _thisClass$i18n15, _thisClass$i18n$requi, _thisClass$i18n16;
+          var _data$required, _thisClass$i18n$custo5, _thisClass$i18n18, _thisClass$i18n$requi, _thisClass$i18n19;
           thisClass.lastfieldID++;
           fieldset = document.createElement('div');
           fieldset.classList.add('form-group', 'checkbox-reverse');
@@ -14446,11 +14473,11 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           input.type = 'checkbox';
           input.id = 'thefield' + thisClass.lastfieldID;
           input.setAttribute('value', (_data$required = data === null || data === void 0 ? void 0 : data.required) !== null && _data$required !== void 0 ? _data$required : '1');
-          input.placeholder = (_thisClass$i18n$custo7 = (_thisClass$i18n15 = thisClass.i18n) === null || _thisClass$i18n15 === void 0 ? void 0 : _thisClass$i18n15.customize__subheading_text) !== null && _thisClass$i18n$custo7 !== void 0 ? _thisClass$i18n$custo7 : 'PopUp Sub-heading text';
+          input.placeholder = (_thisClass$i18n$custo5 = (_thisClass$i18n18 = thisClass.i18n) === null || _thisClass$i18n18 === void 0 ? void 0 : _thisClass$i18n18.customize__subheading_text) !== null && _thisClass$i18n$custo5 !== void 0 ? _thisClass$i18n$custo5 : 'PopUp Sub-heading text';
           label = document.createElement('label');
           label.classList.add('form-label');
           label.setAttribute('for', input.id);
-          label.innerHTML = (_thisClass$i18n$requi = (_thisClass$i18n16 = thisClass.i18n) === null || _thisClass$i18n16 === void 0 ? void 0 : _thisClass$i18n16.required) !== null && _thisClass$i18n$requi !== void 0 ? _thisClass$i18n$requi : 'Required';
+          label.innerHTML = (_thisClass$i18n$requi = (_thisClass$i18n19 = thisClass.i18n) === null || _thisClass$i18n19 === void 0 ? void 0 : _thisClass$i18n19.required) !== null && _thisClass$i18n$requi !== void 0 ? _thisClass$i18n$requi : 'Required';
           fieldset.appendChild(label);
           fieldset.appendChild(input);
           body.appendChild(fieldset);
@@ -14464,12 +14491,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             input.classList.add('form-control', 'form-control-' + field.type);
             input.setAttribute('value', (_data$placeholder = data === null || data === void 0 ? void 0 : data.placeholder) !== null && _data$placeholder !== void 0 ? _data$placeholder : '');
             input.name = 'placeholder';
-            input.placeholder = (_thisClass$i18n$place = (_thisClass$i18n17 = thisClass.i18n) === null || _thisClass$i18n17 === void 0 ? void 0 : _thisClass$i18n17.placeholder_text) !== null && _thisClass$i18n$place !== void 0 ? _thisClass$i18n$place : 'Placeholder text';
+            input.placeholder = (_thisClass$i18n$place = (_thisClass$i18n20 = thisClass.i18n) === null || _thisClass$i18n20 === void 0 ? void 0 : _thisClass$i18n20.placeholder_text) !== null && _thisClass$i18n$place !== void 0 ? _thisClass$i18n$place : 'Placeholder text';
             input.id = 'thefield' + thisClass.lastfieldID;
             label = document.createElement('label');
             label.classList.add('form-label');
             label.setAttribute('for', input.id);
-            label.innerHTML = (_thisClass$i18n$place2 = (_thisClass$i18n18 = thisClass.i18n) === null || _thisClass$i18n18 === void 0 ? void 0 : _thisClass$i18n18.placeholder_text) !== null && _thisClass$i18n$place2 !== void 0 ? _thisClass$i18n$place2 : 'Placeholder text';
+            label.innerHTML = (_thisClass$i18n$place2 = (_thisClass$i18n21 = thisClass.i18n) === null || _thisClass$i18n21 === void 0 ? void 0 : _thisClass$i18n21.placeholder_text) !== null && _thisClass$i18n$place2 !== void 0 ? _thisClass$i18n$place2 : 'Placeholder text';
             fieldset.appendChild(label);
             fieldset.appendChild(input);
             body.appendChild(fieldset);
@@ -14519,7 +14546,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             // fieldset.appendChild(label);fieldset.appendChild(input);
             var repeaters = document.createElement('div');
             repeaters.classList.add('single-repeater-options');
-            repeaters.innerHTML = '<h5 class="h5">Options</h5>';
+            repeaters.innerHTML = "<h5 class=\"h5\">".concat((_thisClass$i18n$optio = (_thisClass$i18n22 = thisClass.i18n) === null || _thisClass$i18n22 === void 0 ? void 0 : _thisClass$i18n22.options) !== null && _thisClass$i18n$optio !== void 0 ? _thisClass$i18n$optio : 'Options', "</h5>");
+            // 
+            if (!(data !== null && data !== void 0 && data.options) || data.options.length <= 0) {
+              repeaters.classList.add('single-repeater-empty');
+            }
+            // 
             thisClass.customier.sortables.options.push(new sortablejs__WEBPACK_IMPORTED_MODULE_2__["default"](repeaters, {
               animation: 150,
               filter: 'h5.h5',
@@ -14535,13 +14567,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             input.classList.add('btn', 'button', 'my-3', 'do_repeater_field');
             input.type = 'button';
             input.dataset.order = 0;
-            input.innerHTML = (_thisClass$i18n$add_n2 = (_thisClass$i18n19 = thisClass.i18n) === null || _thisClass$i18n19 === void 0 ? void 0 : _thisClass$i18n19.add_new_option) !== null && _thisClass$i18n$add_n2 !== void 0 ? _thisClass$i18n$add_n2 : 'Add new Item';
+            input.innerHTML = (_thisClass$i18n$add_n2 = (_thisClass$i18n23 = thisClass.i18n) === null || _thisClass$i18n23 === void 0 ? void 0 : _thisClass$i18n23.add_new_option) !== null && _thisClass$i18n$add_n2 !== void 0 ? _thisClass$i18n$add_n2 : 'Add new Item';
             input.dataset.optionGroup = field.type;
             // 
             input.addEventListener('click', function (event) {
               var _input$dataset$isGrou, _input$dataset;
               event.preventDefault();
               thisClass.do_repeater(input, {}, (_input$dataset$isGrou = (_input$dataset = input.dataset) === null || _input$dataset === void 0 ? void 0 : _input$dataset.isGroup) !== null && _input$dataset$isGrou !== void 0 ? _input$dataset$isGrou : false);
+              repeaters.classList.remove('single-repeater-empty');
             });
             fieldset.appendChild(input);
             ((_data$options = data === null || data === void 0 ? void 0 : data.options) !== null && _data$options !== void 0 ? _data$options : []).forEach(function (option) {
@@ -14560,12 +14593,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             break;
         }
         tab.appendChild(body);
-        thisClass.customier.sortables.blocks.push(new sortablejs__WEBPACK_IMPORTED_MODULE_2__["default"](tab, {
-          animation: 150,
-          dragoverBubble: false,
-          easing: "cubic-bezier(1, 0, 0, 1)",
-          handle: '.customize__step__header'
-        }));
+        // thisClass.customier.sortables.blocks.push(
+        // 	new Sortable(tab, {
+        // 		animation: 150,
+        // 		dragoverBubble: false,
+        // 		easing: "cubic-bezier(1, 0, 0, 1)",
+        // 		// handle: '.customize__step__header',
+        // 	})
+        // );
         return tab;
       }
     }, {
@@ -14620,6 +14655,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           el.dataset.order = 0;
         }
         order = parseInt(el.dataset.order);
+        var parentRepeater = el.parentElement.querySelector('.single-repeater-options');
         wrap = document.createElement('div');
         wrap.classList.add('single-repeater-option', 'show-configs');
 
@@ -14649,6 +14685,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             event.preventDefault();
             if (confirm('Are you sure you want to remove this item?')) {
               wrap.remove();
+              if (parentRepeater) {
+                if (parentRepeater.children.length >= 2) {
+                  parentRepeater.classList.remove('single-repeater-empty');
+                } else {
+                  parentRepeater.classList.add('single-repeater-empty');
+                }
+              }
             }
           });
           var HActToggle = document.createElement('span');
@@ -14877,7 +14920,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           foot.classList.add('single-repeater-foot');
           wrap.appendChild(foot);
         }
-        el.parentElement.querySelector('.single-repeater-options').appendChild(wrap);
+        parentRepeater.appendChild(wrap);
         setTimeout(function () {
           thisClass.init_intervalevent(window.thisClass);
         }, 300);
@@ -14934,7 +14977,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     }, {
       key: "image_button_preview",
       value: function image_button_preview(args, namePrefix, row) {
-        var _subObj$imageURL, _subObj$filename, _thisClass$i18n$remov, _thisClass$i18n20, _subObj$imageID, _subObj$imageUrl, _args$btnText, _subObj$imageID2, _subObj$imageURL2;
+        var _subObj$imageURL, _subObj$filename, _thisClass$i18n$remov, _thisClass$i18n24, _subObj$imageID, _subObj$imageUrl, _args$btnText, _subObj$imageID2, _subObj$imageURL2;
         var div, button, prev_wrap, preview, image, cross;
         var subObj = args !== null && args !== void 0 && args.subObj && row[args === null || args === void 0 ? void 0 : args.subObj] ? row[args === null || args === void 0 ? void 0 : args.subObj] : row;
         div = document.createElement('div');
@@ -14947,7 +14990,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         image.alt = (_subObj$filename = subObj === null || subObj === void 0 ? void 0 : subObj.filename) !== null && _subObj$filename !== void 0 ? _subObj$filename : '';
         cross = document.createElement('div');
         cross.classList.add('dashicons-before', 'dashicons-dismiss');
-        cross.title = (_thisClass$i18n$remov = (_thisClass$i18n20 = thisClass.i18n) === null || _thisClass$i18n20 === void 0 ? void 0 : _thisClass$i18n20.remove) !== null && _thisClass$i18n$remov !== void 0 ? _thisClass$i18n$remov : 'Remove';
+        cross.title = (_thisClass$i18n$remov = (_thisClass$i18n24 = thisClass.i18n) === null || _thisClass$i18n24 === void 0 ? void 0 : _thisClass$i18n24.remove) !== null && _thisClass$i18n$remov !== void 0 ? _thisClass$i18n$remov : 'Remove';
         preview = document.createElement('div');
         preview.classList.add('imgpreview');
         if (((_subObj$imageID = subObj === null || subObj === void 0 ? void 0 : subObj.imageID) !== null && _subObj$imageID !== void 0 ? _subObj$imageID : '') == '') {
@@ -15036,7 +15079,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }
         elem.dataset.context = true;
         if (!((_thisClass$customier2 = thisClass.customier) !== null && _thisClass$customier2 !== void 0 && _thisClass$customier2.contextmenu)) {
-          var _thisClass$i18n$updat, _thisClass$i18n21, _thisClass$i18n$expor, _thisClass$i18n22, _thisClass$i18n$impor, _thisClass$i18n23;
+          var _thisClass$i18n$updat, _thisClass$i18n25, _thisClass$i18n$expor, _thisClass$i18n26, _thisClass$i18n$impor, _thisClass$i18n27;
           var contextMenu = thisClass.customier.contextmenu = document.createElement('div');
           contextMenu.classList.add('contextmenu');
           var ul = thisClass.customier.contextBtns.list = document.createElement('ul');
@@ -15047,7 +15090,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           li.classList.add('contextmenu__list__item');
           a = document.createElement('a');
           a.href = '#';
-          a.innerHTML = (_thisClass$i18n$updat = (_thisClass$i18n21 = thisClass.i18n) === null || _thisClass$i18n21 === void 0 ? void 0 : _thisClass$i18n21.update) !== null && _thisClass$i18n$updat !== void 0 ? _thisClass$i18n$updat : 'Update';
+          a.innerHTML = (_thisClass$i18n$updat = (_thisClass$i18n25 = thisClass.i18n) === null || _thisClass$i18n25 === void 0 ? void 0 : _thisClass$i18n25.update) !== null && _thisClass$i18n$updat !== void 0 ? _thisClass$i18n$updat : 'Update';
           a.addEventListener('click', function (event) {
             var _document$querySelect;
             event.preventDefault();
@@ -15060,7 +15103,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           li.classList.add('contextmenu__list__item');
           a = document.createElement('a');
           a.href = '#';
-          a.innerHTML = (_thisClass$i18n$expor = (_thisClass$i18n22 = thisClass.i18n) === null || _thisClass$i18n22 === void 0 ? void 0 : _thisClass$i18n22.export) !== null && _thisClass$i18n$expor !== void 0 ? _thisClass$i18n$expor : 'Export';
+          a.innerHTML = (_thisClass$i18n$expor = (_thisClass$i18n26 = thisClass.i18n) === null || _thisClass$i18n26 === void 0 ? void 0 : _thisClass$i18n26.export) !== null && _thisClass$i18n$expor !== void 0 ? _thisClass$i18n$expor : 'Export';
           a.addEventListener('click', function (event) {
             event.preventDefault();
             setTimeout(function () {
@@ -15091,7 +15134,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           file.style.display = 'none';
           a = document.createElement('a');
           a.href = '#';
-          a.innerHTML = (_thisClass$i18n$impor = (_thisClass$i18n23 = thisClass.i18n) === null || _thisClass$i18n23 === void 0 ? void 0 : _thisClass$i18n23.import) !== null && _thisClass$i18n$impor !== void 0 ? _thisClass$i18n$impor : 'Import';
+          a.innerHTML = (_thisClass$i18n$impor = (_thisClass$i18n27 = thisClass.i18n) === null || _thisClass$i18n27 === void 0 ? void 0 : _thisClass$i18n27.import) !== null && _thisClass$i18n$impor !== void 0 ? _thisClass$i18n$impor : 'Import';
           file.addEventListener('change', function (event) {
             if (event.target.files[0]) {
               var selectedFile = event.target.files[0];
@@ -15105,13 +15148,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                     if (parsedData !== null && parsedData !== void 0 && parsedData.importable && parsedData !== null && parsedData !== void 0 && parsedData.imports) {
                       thisClass.isImporting = true;
                       thisClass.do_update_submission(parsedData.imports).then(function (response) {
-                        var _thisClass$i18n$succe, _thisClass$i18n24, _thisClass$i18n$reloa, _thisClass$i18n25;
+                        var _thisClass$i18n$succe, _thisClass$i18n28, _thisClass$i18n$reloa, _thisClass$i18n29;
                         sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
                           showCancelButton: true,
                           icon: "success",
-                          title: (_thisClass$i18n$succe = (_thisClass$i18n24 = thisClass.i18n) === null || _thisClass$i18n24 === void 0 ? void 0 : _thisClass$i18n24.success) !== null && _thisClass$i18n$succe !== void 0 ? _thisClass$i18n$succe : "Success",
+                          title: (_thisClass$i18n$succe = (_thisClass$i18n28 = thisClass.i18n) === null || _thisClass$i18n28 === void 0 ? void 0 : _thisClass$i18n28.success) !== null && _thisClass$i18n$succe !== void 0 ? _thisClass$i18n$succe : "Success",
                           text: "Import successfully made! Please reload your application",
-                          confirmButtonText: (_thisClass$i18n$reloa = (_thisClass$i18n25 = thisClass.i18n) === null || _thisClass$i18n25 === void 0 ? void 0 : _thisClass$i18n25.reload) !== null && _thisClass$i18n$reloa !== void 0 ? _thisClass$i18n$reloa : 'Reload'
+                          confirmButtonText: (_thisClass$i18n$reloa = (_thisClass$i18n29 = thisClass.i18n) === null || _thisClass$i18n29 === void 0 ? void 0 : _thisClass$i18n29.reload) !== null && _thisClass$i18n$reloa !== void 0 ? _thisClass$i18n$reloa : 'Reload'
                         }).then(function (result) {
                           if (result !== null && result !== void 0 && result.isConfirmed) {
                             location.reload();
@@ -15135,8 +15178,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                         });
                       });
                     } else {
-                      var _thisClass$i18n$untru, _thisClass$i18n26;
-                      var message = (_thisClass$i18n$untru = (_thisClass$i18n26 = thisClass.i18n) === null || _thisClass$i18n26 === void 0 ? void 0 : _thisClass$i18n26.untrustable) !== null && _thisClass$i18n$untru !== void 0 ? _thisClass$i18n$untru : 'We can\'t find trustable imports contents.';
+                      var _thisClass$i18n$untru, _thisClass$i18n30;
+                      var message = (_thisClass$i18n$untru = (_thisClass$i18n30 = thisClass.i18n) === null || _thisClass$i18n30 === void 0 ? void 0 : _thisClass$i18n30.untrustable) !== null && _thisClass$i18n$untru !== void 0 ? _thisClass$i18n$untru : 'We can\'t find trustable imports contents.';
                       // thisClass.toastify({text: message ,className: "error", duration: 3000, stopOnFocus: true, style: {background: "linear-gradient(to right, #ffb8b8, #ff7575)"}}).showToast();
                       thisClass.toast.fire({
                         icon: 'error',
@@ -15146,9 +15189,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                       });
                     }
                   } catch (error) {
-                    var _thisClass$i18n$error, _thisClass$i18n27;
+                    var _thisClass$i18n$error, _thisClass$i18n31;
                     // console.error('Error parsing JSON:', error);
-                    var message = (_thisClass$i18n$error = (_thisClass$i18n27 = thisClass.i18n) === null || _thisClass$i18n27 === void 0 ? void 0 : _thisClass$i18n27.errorparsingjson) !== null && _thisClass$i18n$error !== void 0 ? _thisClass$i18n$error : 'Error parsing JSON:';
+                    var message = (_thisClass$i18n$error = (_thisClass$i18n31 = thisClass.i18n) === null || _thisClass$i18n31 === void 0 ? void 0 : _thisClass$i18n31.errorparsingjson) !== null && _thisClass$i18n$error !== void 0 ? _thisClass$i18n$error : 'Error parsing JSON:';
                     // thisClass.toastify({text: message + error,className: "error", duration: 3000, stopOnFocus: true, style: {background: "linear-gradient(to right, #ffb8b8, #ff7575)"}}).showToast();
                     thisClass.toast.fire({
                       icon: 'error',
@@ -15332,8 +15375,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         document.querySelectorAll('.single-repeater-option .input-group-append:not([data-handled])').forEach(function (trash) {
           trash.dataset.handled = true;
           trash.addEventListener('click', function (event) {
-            var _thisClass$i18n$rusur, _thisClass$i18n28;
-            if (trash.parentElement && confirm((_thisClass$i18n$rusur = (_thisClass$i18n28 = thisClass.i18n) === null || _thisClass$i18n28 === void 0 ? void 0 : _thisClass$i18n28.rusure) !== null && _thisClass$i18n$rusur !== void 0 ? _thisClass$i18n$rusur : 'Are you sure?')) {
+            var _thisClass$i18n$rusur, _thisClass$i18n32;
+            if (trash.parentElement && confirm((_thisClass$i18n$rusur = (_thisClass$i18n32 = thisClass.i18n) === null || _thisClass$i18n32 === void 0 ? void 0 : _thisClass$i18n32.rusure) !== null && _thisClass$i18n$rusur !== void 0 ? _thisClass$i18n$rusur : 'Are you sure?')) {
               jQuery(trash.parentElement.parentElement).slideUp();
               setTimeout(function () {
                 trash.parentElement.parentElement.remove();
@@ -15369,7 +15412,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           input.dataset.changeObserver = true;
           input.addEventListener('change', function (event) {
             thisClass.customier.pendingSubmission = true;
-            // document.querySelectorAll('#publish').forEach(publish => publish.dataset.disabled = true);
           });
         });
       }
@@ -15382,6 +15424,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       key: "do_update_submission",
       value: function do_update_submission() {
         var imports = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+        var inline = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
         var thisClass = this;
         return new Promise(function (resolve, reject) {
           thisClass.customier.actionBtns.update.classList.add('is_loading');
@@ -15409,6 +15452,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               return tab;
             });
           }
+          if (inline === true) {
+            thisClass.customier.actionBtns.update.classList.remove('is_loading');
+            resolve(thisClass.customier.tabset);
+            return thisClass.customier.tabset;
+          }
+          console.log('hi there');
           // 
           var data = new FormData();
           data.append('_nonce', thisClass.ajaxNonce);
@@ -15418,7 +15467,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           thisClass.post.sendToServer(data, thisClass).then(function (response) {
             thisClass.customier.actionBtns.update.classList.remove('is_loading');
             thisClass.customier.pendingSubmission = false;
-            // document.querySelectorAll('#publish').forEach(publish => publish.dataset.disabled = false);
             resolve(response);
           }).catch(function (error) {
             console.error("Error:", error);

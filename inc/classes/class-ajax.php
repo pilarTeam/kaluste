@@ -40,7 +40,7 @@ class Ajax {
 		wp_send_json_error($response, 500);
 	}
 	public function update_product_configuration() {
-		$_tabset = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', stripslashes(html_entity_decode(isset($_POST['tabset'])?$_POST['tabset']:'{}'))), true);;
+		$_tabset = json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', stripslashes(html_entity_decode(isset($_POST['tabset'])?$_POST['tabset']:'{}'))), true);
 		$is_updated = update_post_meta((int) $_POST['product_id'], '_customized_configuration', $_tabset);
 		wp_send_json_success(true);
 	}

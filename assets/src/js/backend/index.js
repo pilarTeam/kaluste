@@ -381,7 +381,7 @@ import Post from "../modules/post";
 			[...thisClass.customier.tabNavs.children].filter(elem => elem.classList.contains('active')).forEach(elem => elem.classList.remove('active'));
 			[...thisClass.customier.tabs.children].filter(elem => elem.classList.contains('active')).forEach(elem => elem.classList.remove('active'));
 			
-			var toActive = thisClass.customier.tabset.find(tab => tab.args.id === tab_id);
+			var toActive = thisClass.customier.tabset.find(tab => tab?.args && tab.args.id === tab_id);
 			if (toActive) {
 				toActive.args.isActive = true;
 				[...thisClass.customier.tabs.children].find(elem => elem.dataset.id == tab_id).classList.add('active');
@@ -414,12 +414,15 @@ import Post from "../modules/post";
 				var desc = document.createElement('p');desc.classList.add('customizer__addnew__input-desc');
 				switch (field) {
 					case 'text':
+						// label.innerHTML = field.toUpperCase();
 						desc.innerHTML = thisClass.i18n?.adnwblkText??'Select text field for text inputs. User will write any text/comments here.';
 						break;
 					case 'radio':
+						// label.innerHTML = field.toUpperCase();
 						desc.innerHTML = thisClass.i18n?.adnwblkRadio??'Radio groups are for putting options inline where user could choose an option.';
 						break;
 					case 'image':
+						// label.innerHTML = field.toUpperCase();
 						desc.innerHTML = thisClass.i18n?.adnwblkImage??'Image blocks are for putting images choosen ability for metarial selection.';
 						break;
 					default:
@@ -640,20 +643,21 @@ import Post from "../modules/post";
 					input.addEventListener('click', (event) => {
 						event.preventDefault();
 						thisClass.do_repeater(
-							input, {}, (input.dataset?.isGroup??false)
+							input, {
+								rootType: field.type
+							}, (input.dataset?.isGroup??false)
 						);
 						repeaters.classList.remove('single-repeater-empty');
 					});
 					fieldset.appendChild(input);
 					
 					(data?.options??[]).forEach(option => {
-						option.rootType = data?.type;
+						option.rootType = data?.type??(field?.type);
 						thisClass.do_repeater(fieldset.querySelector('.do_repeater_field'), option, false);
 					});
 					/**
 					 * Reapeter fields
 					 */
-					
 					body.appendChild(fieldset);
 					break;
 				default:
@@ -675,7 +679,7 @@ import Post from "../modules/post";
 		doto_field(type) {
 			var field;
 			switch (type) {
-				case 'select':case 'radio':case 'checkbox':
+				case 'select':case 'radio':case 'checkbox':case 'image':
 					field = {
 						type: type,
 						steptitle: true,
@@ -799,7 +803,7 @@ import Post from "../modules/post";
 						row
 					));
 				}
-				// // 
+				// 
 				// // Preview + Upload Button
 				// config.appendChild(thisClass.image_button_preview(
 				// 	{
@@ -818,126 +822,128 @@ import Post from "../modules/post";
 				// label = document.createElement('label');label.classList.add('form-label');label.innerHTML = 'Label';
 				// 
 				// Gallery Section
-				// var fcontrol = document.createElement('div');fcontrol.classList.add('w-half');
-				// var gHidden = document.createElement('input');gHidden.classList.add('form-control');
-				// gHidden.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.gallery';gHidden.type = 'hidden';
-				// gHidden.setAttribute('value', JSON.stringify(row?.gallery??[]));config.appendChild(gHidden);
-				// var gallery = document.createElement('button');gallery.classList.add('btn', 'button', 'w-half');
-				// gallery.type = 'button';gallery.innerHTML = 'Gallery Setup';
-				// gallery.addEventListener('click', (event) => {
-				// 	event.preventDefault();
-				// 	let currentConfig = row?.gallery??[];
-				// 	Swal.fire({
-				// 		focusConfirm: false,
-				// 		showCloseButton: true,
-				// 		showCancelButton: true,
-				// 		title: `Gallery ${headtext.innerHTML}`,
-				// 		html: '<div id="topushnewgallery"></div>',
-				// 		confirmButtonText: thisClass.i18n?.update??'Update',
-				// 		allowOutsideClick: () => false,
-				// 		didOpen: () => {
-				// 			const body = Swal.getPopup().querySelector("#topushnewgallery");
-				// 			var gallerycont = document.createElement('div');
-				// 			gallerycont.classList.add('gallery-container');
-				// 			var gallerywrap = document.createElement('div');
-				// 			gallerywrap.classList.add('gallery-wrap');
-				// 			var galleryrow = document.createElement('div');
-				// 			galleryrow.classList.add('gallery-row');
-				// 			/**
-				// 			 * A lot of task here...
-				// 			 */
-				// 			var galleryItemHtml = (item, index) => {
-				// 				var gcard = document.createElement('div');
-				// 				gcard.classList.add('gallery-card');
-				// 				var gwrap = document.createElement('div');
-				// 				gwrap.classList.add('gallery-card-wrap');
-				// 				var gimg = document.createElement('div');
-				// 				gimg.classList.add('gallery-card-img', 'imgpreview');
-				// 				var img = document.createElement('img');
-				// 				img.alt = item.title;
-				// 				img.src = item?.thumbUrl??'';
-				// 				var remove = document.createElement('div');
-				// 				remove.classList.add('dashicons-before', 'dashicons-dismiss');
-				// 				remove.title = thisClass.i18n?.remove??'Remove';
-				// 				remove.addEventListener('click', (event) => {
-				// 					event.preventDefault();
-				// 					if (confirm('Are you sure you want to remove this item?')) {
-				// 						console.log(currentConfig)
-				// 						currentConfig.filter(row => row.id === item.id);
-				// 						gcard.remove();
-				// 						console.log(currentConfig)
-				// 					}
-				// 				});
-				// 				gimg.appendChild(img);gimg.appendChild(remove);gwrap.appendChild(gimg);gcard.appendChild(gwrap);
-				// 				return gcard;
-				// 			};
-				// 			// 
-				// 			(row?.gallery??[]).forEach((item, index) => {
-				// 				galleryrow.appendChild(galleryItemHtml(item, index));
-				// 			});
-				// 			// 
-				// 			gallerywrap.appendChild(galleryrow);
-				// 			var galleryfoot = document.createElement('div');
-				// 			galleryfoot.classList.add('gallery-card-foot');
-				// 			var button = document.createElement('button');
-				// 			button.type = 'button';button.classList.add('btn', 'button');
-				// 			button.innerHTML = button.title = 'Add Item';
-				// 			button.addEventListener('click', (event) => {
-				// 				event.preventDefault();
-				// 				try {
-				// 					if (typeof wp.media!=='undefined') {
-				// 						var mediaUploader = wp.media({
-				// 							title: 'Select / Upload a gallery Item',
-				// 							button: {text: 'Use this Image'},
-				// 							multiple: true
-				// 						});
-				// 						mediaUploader.on('select', function() {
-				// 							mediaUploader.state().get('selection').map(attachment => {
-				// 								attachment = attachment.toJSON();
-				// 								if (attachment.type !== 'image') {
-				// 									throw new Error('You can only upload images as gallery item');
-				// 								}
-				// 								if (!currentConfig.find(item => item.id === attachment.id)) {
-				// 									var item = {
-				// 										id: attachment.id,
-				// 										title: attachment.title,
-				// 										// imageUrl: attachment.url,
-				// 										thumbUrl: attachment.sizes?.thumbnail?.url??'',
-				// 										filename: attachment?.filename??'',
-				// 									};
-				// 									currentConfig.push(item);
-				// 									galleryrow.appendChild(galleryItemHtml(item, (currentConfig.length + 1)));
-				// 								} else {
-				// 									throw new Error('You can\'t import same image file twice.');
-				// 								}
-				// 							});
-				// 						});
-				// 						mediaUploader.open();
-				// 					} else {
-				// 						throw new Error('WordPress media library not initialized.');
-				// 					}
-				// 				} catch (error) {
-				// 					console.log(error);
-				// 				}
-				// 			});
-				// 			galleryfoot.appendChild(button);
-				// 			gallerywrap.appendChild(galleryfoot);
-				// 			gallerycont.appendChild(gallerywrap);
-				// 			body.appendChild(gallerycont);
-				// 		}
-				// 	}).then((result) => {
-				// 		// console.log(result);
-				// 		if (result?.isConfirmed) {
-				// 			if (currentConfig) {
-				// 				gHidden.value = JSON.stringify(currentConfig);
-				// 			}
-				// 		}
-				// 		// if (result.dismiss === Swal.DismissReason.timer) {
-				// 		//   console.log("I was closed by the timer");
-				// 		// }
-				// 	});
-				// });
-				// fcontrol.appendChild(gallery);
+				if (true) {
+					var fcontrol = document.createElement('div');fcontrol.classList.add('w-half');
+					var gHidden = document.createElement('input');gHidden.classList.add('form-control');
+					gHidden.name = ((groupAt !== false)?'groups.'+groupAt+'.options.':'options.')+order+'.gallery';gHidden.type = 'hidden';
+					gHidden.setAttribute('value', JSON.stringify(row?.gallery??[]));config.appendChild(gHidden);
+					var gallery = document.createElement('button');gallery.classList.add('btn', 'button', 'w-half');
+					gallery.type = 'button';gallery.innerHTML = 'Gallery Setup';
+					gallery.addEventListener('click', (event) => {
+						event.preventDefault();
+						let currentConfig = row?.gallery??[];
+						Swal.fire({
+							focusConfirm: false,
+							showCloseButton: true,
+							showCancelButton: true,
+							title: `Gallery ${headtext.innerHTML}`,
+							html: '<div id="topushnewgallery"></div>',
+							confirmButtonText: thisClass.i18n?.update??'Update',
+							allowOutsideClick: () => false,
+							didOpen: () => {
+								const body = Swal.getPopup().querySelector("#topushnewgallery");
+								var gallerycont = document.createElement('div');
+								gallerycont.classList.add('gallery-container');
+								var gallerywrap = document.createElement('div');
+								gallerywrap.classList.add('gallery-wrap');
+								var galleryrow = document.createElement('div');
+								galleryrow.classList.add('gallery-row');
+								/**
+								 * A lot of task here...
+								 */
+								var galleryItemHtml = (item, index) => {
+									var gcard = document.createElement('div');
+									gcard.classList.add('gallery-card');
+									var gwrap = document.createElement('div');
+									gwrap.classList.add('gallery-card-wrap');
+									var gimg = document.createElement('div');
+									gimg.classList.add('gallery-card-img', 'imgpreview');
+									var img = document.createElement('img');
+									img.alt = item.title;
+									img.src = item?.thumbUrl??'';
+									var remove = document.createElement('div');
+									remove.classList.add('dashicons-before', 'dashicons-dismiss');
+									remove.title = thisClass.i18n?.remove??'Remove';
+									remove.addEventListener('click', (event) => {
+										event.preventDefault();
+										if (confirm('Are you sure you want to remove this item?')) {
+											console.log(currentConfig)
+											currentConfig.filter(row => row.id === item.id);
+											gcard.remove();
+											console.log(currentConfig)
+										}
+									});
+									gimg.appendChild(img);gimg.appendChild(remove);gwrap.appendChild(gimg);gcard.appendChild(gwrap);
+									return gcard;
+								};
+								// 
+								(row?.gallery??[]).forEach((item, index) => {
+									galleryrow.appendChild(galleryItemHtml(item, index));
+								});
+								// 
+								gallerywrap.appendChild(galleryrow);
+								var galleryfoot = document.createElement('div');
+								galleryfoot.classList.add('gallery-card-foot');
+								var button = document.createElement('button');
+								button.type = 'button';button.classList.add('btn', 'button');
+								button.innerHTML = button.title = 'Add Item';
+								button.addEventListener('click', (event) => {
+									event.preventDefault();
+									try {
+										if (typeof wp.media!=='undefined') {
+											var mediaUploader = wp.media({
+												title: 'Select / Upload a gallery Item',
+												button: {text: 'Use this Image'},
+												multiple: true
+											});
+											mediaUploader.on('select', function() {
+												mediaUploader.state().get('selection').map(attachment => {
+													attachment = attachment.toJSON();
+													if (attachment.type !== 'image') {
+														throw new Error('You can only upload images as gallery item');
+													}
+													if (!currentConfig.find(item => item.id === attachment.id)) {
+														var item = {
+															id: attachment.id,
+															title: attachment.title,
+															// imageUrl: attachment.url,
+															thumbUrl: attachment.sizes?.thumbnail?.url??'',
+															filename: attachment?.filename??'',
+														};
+														currentConfig.push(item);
+														galleryrow.appendChild(galleryItemHtml(item, (currentConfig.length + 1)));
+													} else {
+														throw new Error('You can\'t import same image file twice.');
+													}
+												});
+											});
+											mediaUploader.open();
+										} else {
+											throw new Error('WordPress media library not initialized.');
+										}
+									} catch (error) {
+										console.log(error);
+									}
+								});
+								galleryfoot.appendChild(button);
+								gallerywrap.appendChild(galleryfoot);
+								gallerycont.appendChild(gallerywrap);
+								body.appendChild(gallerycont);
+							}
+						}).then((result) => {
+							// console.log(result);
+							if (result?.isConfirmed) {
+								if (currentConfig) {
+									gHidden.value = JSON.stringify(currentConfig);
+								}
+							}
+							// if (result.dismiss === Swal.DismissReason.timer) {
+							//   console.log("I was closed by the timer");
+							// }
+						});
+					});
+					fcontrol.appendChild(gallery);
+				}
 
 				config.appendChild(fcontrol);
 				// 

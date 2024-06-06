@@ -284,7 +284,7 @@ class Woocommerce {
 		if (isset($_POST['__customizer_configurations']) && !empty($_POST['__customizer_configurations'])) {
 			try {
 				$data = (array) json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', stripslashes(html_entity_decode(isset($_POST['__customizer_configurations'])?$_POST['__customizer_configurations']:'{}'))), true);
-				// kaluste_print($data);
+				// kprint($data);
 				$is_updated = update_post_meta($post_id, '_customized_configuration', $data);
 			} catch (\Throwable $th) {
 				//throw $th;
@@ -346,7 +346,9 @@ class Woocommerce {
 	 * 
 	 * @return void
 	 */
-	// public function woocommerce_before_single_product() {
-	// }
+	public function woocommerce_before_single_product() {
+		$custom_path = KALUSTE_DIR_PATH . '/templates/woocommerce/single-product/content-single-product.php';
+    	include $custom_path;
+	}
 
 }

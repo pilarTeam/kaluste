@@ -43,7 +43,7 @@ defined('KALUSTE_OPTIONS') || define('KALUSTE_OPTIONS', get_option('kaluste'));
 
 require_once KALUSTE_DIR_PATH . '/inc/helpers/autoloader.php';
 // require_once KALUSTE_DIR_PATH . '/inc/helpers/template-tags.php';
-function kaluste_print($args = []) {
+function kprint($args = []) {
 	echo '<pre>';print_r($args);wp_die('Remal Mahmud (mahmudremal@yahoo.com)');echo '</pre>';
 }
 
